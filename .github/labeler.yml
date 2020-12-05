@@ -1,8 +1,8 @@
 TestsMissing:
   - "!tests/**/*"
 
-@domain/IDMS:
+"@domain/IDMS":
   - "src/IDMS/*"
 
-@domain/tasks:
+"@domain/tasks":
   - "src/Tasks/*"

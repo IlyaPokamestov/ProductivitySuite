@@ -1,4 +1,6 @@
 {
+    "name": "ilya_pokamestov/productivity_suite",
+    "description": "The project contains an applications for productivity suite",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "dev",

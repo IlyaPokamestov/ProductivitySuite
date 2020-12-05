@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  nginx:
+    image: nginx:1.19
+    depends_on:
+      - productivity_suite
+    volumes:
+      - ./:/var/www/productivity_suite
+      - ./docker/configuration/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
+    environment:
+      VIRTUAL_HOST: productivity.suite.local
+
+  productivity_suite:
+    image: productivity_suite
+    build: .
+    restart: always
+    depends_on:
+      - database
+    volumes:
+      - ./:/var/www/productivity_suite:cached
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+      DATABASE_URL: postgresql://psuite_app:psuite_app_pass@database:5432/productivity_suite?charset=UTF8
+
+  database:
+    image: postgres:13.1
+    restart: always
+    environment:
+      POSTGRES_DB: productivity_suite
+      POSTGRES_USER: psuite_app
+      POSTGRES_PASSWORD: psuite_app_pass
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - database:/var/lib/postgresql/data:delegated
+    ports:
+      - "5432:5432/tcp"
+
+volumes:
+  database:

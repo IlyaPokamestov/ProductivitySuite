@@ -1,0 +1,44 @@
+{
+    "commit-msg": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\Ramsey\\CaptainHook\\ValidateConventionalCommit",
+                "options": {
+                    "configFile": "./config/conventional-commits.json"
+                }
+            }
+        ]
+    },
+    "pre-commit": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\CaptainHook\\App\\Hook\\PHP\\Action\\Linting",
+                "options": [],
+                "conditions": []
+            },
+            {
+                "action": "bin/phpunit",
+                "options": [],
+                "conditions": []
+            },
+            {
+                "action": "phpcs --standard=PSR12 src",
+                "options": [],
+                "conditions": []
+            }
+        ]
+    },
+    "prepare-commit-msg": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\Ramsey\\CaptainHook\\PrepareConventionalCommit",
+                "options": {
+                    "configFile": "./config/conventional-commits.json"
+                }
+            }
+        ]
+    }
+}

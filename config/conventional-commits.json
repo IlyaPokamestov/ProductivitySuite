@@ -1,0 +1,22 @@
+{
+    "typeCase": "kebab",
+    "types": [
+        "feat",
+        "fix",
+        "build",
+        "chore",
+        "ci",
+        "docs",
+        "refactor",
+        "perf",
+        "test"
+    ],
+    "scopeCase": "kebab",
+    "scopeRequired": true,
+    "scopes": [
+        "idms",
+        "tasks",
+        "all"
+    ],
+    "descriptionCase": "lower"
+}

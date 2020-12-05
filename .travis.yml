@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 7.4
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+install:
+  - composer install --no-interaction --dev
+
+script:
+  - mkdir -p build/logs
+  - ./vendor/bin/phpunit --coverage-text

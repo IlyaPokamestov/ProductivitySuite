@@ -1,5 +1,8 @@
 TestsMissing:
-  - "!tests/**/*"
+  all: ["!tests/**/*", "!.github/**/*"]
+
+CI:
+  - "!.github/**/*"
 
 "@domain/IDMS":
   - "src/IDMS/*"

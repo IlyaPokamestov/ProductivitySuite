@@ -7,11 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Add Pull Request Reviewer
-        uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
-        with:
-          reviewers: IlyaPokamestov
-          token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Assign Me
+          uses: AlbertHernandez/assign-me@v1.0.0
       - uses: actions/labeler@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"

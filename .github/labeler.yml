@@ -1,11 +1,11 @@
 TestsMissing:
-  - all: ["!tests/**/*", "!.github/**/*"]
+  - all: ['src/**/*', '!tests/**/*']
 
 CI:
-  - "!.github/**/*"
+  - '!.github/**/*'
 
 "@domain/IDMS":
-  - "src/IDMS/*"
+  - 'src/IDMS/*'
 
 "@domain/tasks":
-  - "src/Tasks/*"
+  - 'src/Tasks/*'

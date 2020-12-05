@@ -1,5 +1,5 @@
 TestsMissing:
-  - all: ['src/**/*', '!tests/**/*']
+  - any: ['src/**/*', '!tests/**/*']
 
 CI:
   - '!.github/**/*'

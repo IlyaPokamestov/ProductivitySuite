@@ -44,6 +44,22 @@ class TaskList extends AggregateRoot implements Removable
     }
 
     /**
+     * @return ListId
+     */
+    public function getId(): ListId
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * Remove list.
      */
     public function remove(): void

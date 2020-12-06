@@ -30,8 +30,9 @@ class CreateTaskHandler
 
     /**
      * @param CreateTask $createTask
+     * @return string
      */
-    public function __invoke(CreateTask $createTask)
+    public function __invoke(CreateTask $createTask): string
     {
         //TODO: Check that list exists.
 
@@ -42,5 +43,7 @@ class CreateTaskHandler
         );
 
         $this->taskRepository->save($task);
+
+        return (string) $task->getId();
     }
 }

@@ -2,29 +2,27 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Task;
+namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\Task;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTaskHandler;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTaskHandler;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTaskHandler;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-class UpdateTaskHandlerTest extends TestCase
+class MoveTaskHandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testTaskUpdate()
+    public function testTaskMove()
     {
         $task = \Mockery::mock(Task::class);
-        $task->shouldReceive('update')
-            ->with(\Mockery::type(Description::class))
+        $task->shouldReceive('move')
+            ->with(\Mockery::type(ListId::class))
             ->andReturnNull();
 
         $repository = \Mockery::mock(TaskRepository::class);
@@ -35,13 +33,12 @@ class UpdateTaskHandlerTest extends TestCase
             ->with(\Mockery::type(Task::class))
             ->andReturnNull();
 
-        $command = new UpdateTask(
+        $command = new MoveTask(
             Uuid::uuid4()->toString(),
-            'Do that!',
-            '',
+            Uuid::uuid4()->toString(),
         );
 
-        $handler = new UpdateTaskHandler($repository);
+        $handler = new MoveTaskHandler($repository);
         $handler($command);
     }
 }

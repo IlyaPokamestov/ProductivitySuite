@@ -2,3 +2,8 @@ idms_api:
     resource: ./domains/idms_v1.yaml
     name_prefix: idms_api_v1_
     prefix: /api/v1/
+
+tasks_api:
+    resource: ./domains/tasks_v1.yaml
+    name_prefix: tasks_api_v1_
+    prefix: /api/v1/

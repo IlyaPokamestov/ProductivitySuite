@@ -19,8 +19,16 @@ services:
     IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\:
         resource: '../src/IDMS/Infrastructure/'
 
+    IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\:
+        resource: '../src/Tasks/Infrastructure/'
+
     IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
     IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
+
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\ListRepository'
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\ListRepository'
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\TaskRepository'
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\TaskRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -46,14 +54,14 @@ services:
 
     tasks.command_handlers:
         namespace: IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\
-        resource: '../src/IDMS/Application/Command/*/*/*Handler.php'
+        resource: '../src/Tasks/Application/Command/*/*Handler.php'
         autoconfigure: false
         tags:
             - { name: messenger.message_handler, bus: tasks.command.bus }
 
     tasks.query_handlers:
         namespace: IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\
-        resource: '../src/IDMS/Application/Query/*/*/*Handler.php'
+        resource: '../src/Tasks/Application/Query/*/*Handler.php'
         autoconfigure: false
         tags:
             - { name: messenger.message_handler, bus: tasks.query.bus }
@@ -71,4 +79,12 @@ services:
         arguments:
             - '@idms.query.bus'
             - '@idms.command.bus'
+        tags: [ 'controller.service_arguments' ]
+
+    # Tasks Controllers
+    IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\:
+        resource: '../src/Tasks/Presentation/REST/Controller/'
+        arguments:
+            - '@tasks.query.bus'
+            - '@tasks.command.bus'
         tags: [ 'controller.service_arguments' ]

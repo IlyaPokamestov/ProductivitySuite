@@ -11,10 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class Consumer
+ * Class ConsumerController
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller
  */
-class Consumer
+class ConsumerController
 {
     use HandleTrait;
 

@@ -7,9 +7,9 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository as WriteRepository;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskRepository as ReadRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\TaskRepository as ReadRepository;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task as ReadOnlyTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\Task as ReadOnlyTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 
@@ -56,7 +56,8 @@ class TaskRepository implements WriteRepository, ReadRepository
 
         return new ReadOnlyTask(
             (string) $task->getId(),
-            $task->getDescription()->getTitle()
+            $task->getDescription()->getTitle(),
+            (string) $task->getListId(),
         );
     }
 }

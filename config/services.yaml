@@ -22,13 +22,15 @@ services:
     IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\:
         resource: '../src/Tasks/Infrastructure/'
 
+#TODO: Split services per domain.
+
     IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
     IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
 
     IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\ListRepository'
     IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\ListRepository'
     IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\TaskRepository'
-    IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\TaskRepository'
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\TaskRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

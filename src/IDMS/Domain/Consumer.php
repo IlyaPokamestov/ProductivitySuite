@@ -52,4 +52,28 @@ class Consumer extends AggregateRoot
             (string) $email
         ));
     }
+
+    /**
+     * @return ConsumerId
+     */
+    public function getId(): ConsumerId
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Name
+     */
+    public function getName(): Name
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Email
+     */
+    public function getEmail(): Email
+    {
+        return $this->email;
+    }
 }

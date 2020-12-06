@@ -16,8 +16,18 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="all">
+            <directory>tests/</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>tests/IDMS/Unit</directory>
+            <directory>tests/Tasks/Unit</directory>
+            <directory>tests/Library/DomainFramework/Unit</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>tests/IDMS/Functional</directory>
+<!--            <directory>tests/Tasks/Unit</directory>-->
+<!--            <directory>tests/Library/DomainFramework/Unit</directory>-->
         </testsuite>
     </testsuites>
 

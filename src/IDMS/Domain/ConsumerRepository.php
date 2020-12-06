@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\IDMS\Domain;
 
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+
 /**
  * Interface ConsumerRepository
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Domain

@@ -1,0 +1,3 @@
+idms_controllers:
+    resource: ../../../src/IDMS/Presentation/REST/Controller
+    type: annotation

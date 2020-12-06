@@ -8,7 +8,7 @@ Documentation:
   - 'docs/**/*'
 
 "@domain/IDMS":
-  - 'src/IDMS/*'
+  - 'src/IDMS/**/*'
 
 "@domain/tasks":
-  - 'src/Tasks/*'
+  - 'src/Tasks/**/*'

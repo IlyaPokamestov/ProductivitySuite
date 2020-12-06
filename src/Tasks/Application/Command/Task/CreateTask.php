@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Class CreateTask
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task
@@ -14,16 +16,19 @@ class CreateTask
     private string $title;
     /** @var string */
     private string $note = '';
-    /** @var string */
-    private string $listId;
+    /**
+     * @var ?string
+     * @Serializer\SerializedName("listId")
+     */
+    private ?string $listId;
 
     /**
      * CreateTask constructor.
      * @param string $title
      * @param string $note
-     * @param string $listId
+     * @param ?string $listId
      */
-    public function __construct(string $title, string $note, string $listId)
+    public function __construct(string $title, string $note, ?string $listId = null)
     {
         $this->title = $title;
         $this->note = $note;
@@ -47,9 +52,9 @@ class CreateTask
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getListId(): string
+    public function getListId(): ?string
     {
         return $this->listId;
     }

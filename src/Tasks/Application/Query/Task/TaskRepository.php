@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Query;
+namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 
 /**
  * Interface TaskRepository
- * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Query
+ * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task
  */
 interface TaskRepository
 {

@@ -28,8 +28,9 @@ class CreateListHandler
 
     /**
      * @param CreateList $createList
+     * @return string
      */
-    public function __invoke(CreateList $createList)
+    public function __invoke(CreateList $createList): string
     {
         $list = TaskList::create(
             ListId::generate(),
@@ -37,5 +38,7 @@ class CreateListHandler
         );
 
         $this->listRepository->save($list);
+
+        return (string) $list->getId();
     }
 }

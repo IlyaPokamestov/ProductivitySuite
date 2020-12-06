@@ -98,4 +98,28 @@ class Task extends AggregateRoot implements Removable
         $this->removed = true;
         $this->record(new TaskRemoved((string) $this->id));
     }
+
+    /**
+     * @return TaskId
+     */
+    public function getId(): TaskId
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return ListId
+     */
+    public function getListId(): ListId
+    {
+        return $this->listId;
+    }
+
+    /**
+     * @return Description
+     */
+    public function getDescription(): Description
+    {
+        return $this->description;
+    }
 }

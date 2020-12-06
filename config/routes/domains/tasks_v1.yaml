@@ -1,0 +1,3 @@
+idms_controllers:
+    resource: ../../../src/Tasks/Presentation/REST/Controller
+    type: annotation

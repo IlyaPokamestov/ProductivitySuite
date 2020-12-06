@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Task;
+namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\Task;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\RemoveTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\RemoveTaskHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTaskHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
@@ -13,15 +14,15 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-class RemoveTaskHandlerTest extends TestCase
+class UpdateTaskHandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testTaskRemove()
+    public function testTaskUpdate()
     {
         $task = \Mockery::mock(Task::class);
-        $task->shouldReceive('remove')
-            ->withNoArgs()
+        $task->shouldReceive('update')
+            ->with(\Mockery::type(Description::class))
             ->andReturnNull();
 
         $repository = \Mockery::mock(TaskRepository::class);
@@ -32,11 +33,13 @@ class RemoveTaskHandlerTest extends TestCase
             ->with(\Mockery::type(Task::class))
             ->andReturnNull();
 
-        $command = new RemoveTask(
+        $command = new UpdateTask(
             Uuid::uuid4()->toString(),
+            'Do that!',
+            '',
         );
 
-        $handler = new RemoveTaskHandler($repository);
+        $handler = new UpdateTaskHandler($repository);
         $handler($command);
     }
 }

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Task;
+namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\Task;
 
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTaskHandler;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -29,7 +30,8 @@ class CreateTaskHandlerTest extends TestCase
             Uuid::uuid4()->toString(),
         );
 
+        $id = ListId::next();
         $handler = new CreateTaskHandler($repository);
-        $handler($command);
+        $this->assertEquals($id, $handler($command));
     }
 }

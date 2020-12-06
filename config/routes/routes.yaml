@@ -1,0 +1,4 @@
+idms_api:
+    resource: ./domains/idms_v1.yaml
+    name_prefix: idms_api_v1_
+    prefix: /api/v1/

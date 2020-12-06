@@ -13,20 +13,62 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    IlyaPokamestov\ProductivitySuite\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
-            - '../src/Tests/'
-            - '../src/Library/DomainFramework/Domain'
+    IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\:
+        resource: '../src/Library/ApplicationFramework/'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    IlyaPokamestov\ProductivitySuite\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
+    IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\:
+        resource: '../src/IDMS/Infrastructure/'
+
+    IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
+    IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\DoctrineDomainEventsCollector:
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    # Buses configuration
+    idms.command_handlers:
+        namespace: IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\
+        resource: '../src/IDMS/Application/Command/*Handler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: idms.command.bus }
+
+    idms.query_handlers:
+        namespace: IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\
+        resource: '../src/IDMS/Application/Query/*Handler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: idms.query.bus }
+
+    tasks.command_handlers:
+        namespace: IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\
+        resource: '../src/IDMS/Application/Command/*/*/*Handler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: tasks.command.bus }
+
+    tasks.query_handlers:
+        namespace: IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\
+        resource: '../src/IDMS/Application/Query/*/*/*Handler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: tasks.query.bus }
+
+    event_handlers:
+        namespace: IlyaPokamestov\ProductivitySuite\
+        resource: '../src/**/*EventHandler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: event.bus }
+
+    # IDMS Controllers
+    IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller\:
+        resource: '../src/IDMS/Presentation/REST/Controller/'
+        arguments:
+            - '@idms.query.bus'
+            - '@idms.command.bus'
+        tags: [ 'controller.service_arguments' ]

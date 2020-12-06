@@ -1,14 +1,11 @@
 name: PHP Composer
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,5 +30,7 @@ jobs:
       # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
       # Docs: https://getcomposer.org/doc/articles/scripts.md
 
-      - name: Run test suite
-        run: bin/phpunit --coverage-text
+      - name: Run unit suite
+        run: bin/phpunit --coverage-text --printer mheap\\GithubActionsReporter\\Printer --testsuite unit
+      - name: Run functional suite
+        run: bin/phpunit --coverage-text --printer mheap\\GithubActionsReporter\\Printer --testsuite functional

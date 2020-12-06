@@ -28,7 +28,11 @@ class RegistrationHandler
         $this->consumerRepository = $consumerRepository;
     }
 
-    public function __invoke(RegisterConsumer $registerConsumer)
+    /**
+     * @param RegisterConsumer $registerConsumer
+     * @return string
+     */
+    public function __invoke(RegisterConsumer $registerConsumer): string
     {
         $consumer = Consumer::register(
             //TODO: Replace with generator.
@@ -42,5 +46,7 @@ class RegistrationHandler
         );
 
         $this->consumerRepository->save($consumer);
+
+        return (string) $consumer->getId();
     }
 }

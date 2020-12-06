@@ -2,7 +2,10 @@ TestsMissing:
   - all: ['src/**/*', '!tests/**/*']
 
 CI:
-  - '!.github/**/*'
+  - '.github/**/*'
+
+Documentation:
+  - 'docs/**/*'
 
 "@domain/IDMS":
   - 'src/IDMS/*'

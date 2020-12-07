@@ -8,7 +8,7 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\Entity
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\RemoveTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CompleteTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\FindById;
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\MessageBus\HandleTrait;
@@ -51,15 +51,17 @@ class TaskController
 
     /**
      * @Route("/tasks/{id}", name="task.update", methods={"PATCH"})
-     * @ParamConverter("updateTask", converter="fos_rest.request_body")
+     * @ParamConverter("patchRequest", converter="fos_rest.request_body")
      *
      * @param string $id
-     * @param UpdateTask $updateTask
+     * @param CompleteTaskRequest $patchRequest
      * @return Task
      */
-    public function update(string $id, UpdateTask $updateTask)
+    public function update(string $id, CompleteTaskRequest $patchRequest)
     {
-        $this->command($updateTask);
+        if ($patchRequest->isCompleted()) {
+            $this->command(new CompleteTask($id));
+        }
 
         return $this->query(new FindById($id));
     }
@@ -86,12 +88,12 @@ class TaskController
      * @ParamConverter("moveTask", converter="fos_rest.request_body")
      *
      * @param string $id
-     * @param MoveTask $moveTask
-     * @return MoveTask
+     * @param MoveTaskRequest $moveTask
+     * @return MoveTaskRequest
      */
-    public function move(string $id, MoveTask $moveTask)
+    public function move(string $id, MoveTaskRequest $moveTask)
     {
-        $this->command($moveTask);
+        $this->command(new MoveTask($id, $moveTask->getListId()));
 
         return $moveTask;
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\Task;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\UpdateTaskHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CompleteTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CompleteTaskHandler;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
@@ -16,15 +16,15 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-class UpdateTaskHandlerTest extends TestCase
+class CompleteTaskHandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
     public function testTaskUpdate()
     {
         $task = \Mockery::mock(Task::class);
-        $task->shouldReceive('update')
-            ->with(\Mockery::type(Description::class))
+        $task->shouldReceive('complete')
+            ->withNoArgs()
             ->andReturnNull();
 
         $repository = \Mockery::mock(TaskRepository::class);
@@ -40,13 +40,11 @@ class UpdateTaskHandlerTest extends TestCase
             ->with(\Mockery::type(Task::class))
             ->andReturnNull();
 
-        $command = new UpdateTask(
+        $command = new CompleteTask(
             Uuid::uuid4()->toString(),
-            'Do that!',
-            '',
         );
 
-        $handler = new UpdateTaskHandler($repository, $policy);
+        $handler = new CompleteTaskHandler($repository, $policy);
         $handler($command);
     }
 }

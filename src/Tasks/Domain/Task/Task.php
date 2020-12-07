@@ -13,7 +13,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCreated;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskMoved;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskRemoved;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskUpdated;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCompleted;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -52,6 +52,13 @@ class Task extends AggregateRoot implements Removable, Ownerable
     private Description $description;
 
     /**
+     * @ORM\Column(type="boolean", options={"default":"0"})
+     *
+     * @var bool
+     */
+    private bool $completed = false;
+
+    /**
      * @param TaskId $id
      * @param ListId $listId
      * @param Description $description
@@ -87,18 +94,14 @@ class Task extends AggregateRoot implements Removable, Ownerable
     }
 
     /**
-     * Update description of the task.
-     *
-     * @param Description $description
+     * Complete Task
      */
-    public function update(Description $description): void
+    public function complete(): void
     {
-        $this->description = $description;
+        $this->completed = true;
 
-        $this->record(new TaskUpdated(
+        $this->record(new TaskCompleted(
             (string) $this->id,
-            $description->getTitle(),
-            $description->getNote()
         ));
     }
 

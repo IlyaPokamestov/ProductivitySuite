@@ -19,7 +19,7 @@
                 "conditions": []
             },
             {
-                "action": "bin/phpunit",
+                "action": "bin/phpunit --testsuite unit",
                 "options": [],
                 "conditions": []
             },

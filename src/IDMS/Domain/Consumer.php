@@ -5,18 +5,35 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\IDMS\Domain;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoot;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Consumer
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Domain
+ * @ORM\Entity()
  */
 class Consumer extends AggregateRoot
 {
-    /** @var ConsumerId */
+    /**
+     * @ORM\Id()
+     * @ORM\Column(type="consumer_id")
+     *
+     * @var ConsumerId
+     */
     private ConsumerId $id;
-    /** @var Name */
+
+    /**
+     * @ORM\Embedded(class = "Name")
+     *
+     * @var Name
+     */
     private Name $name;
-    /** @var Email */
+
+    /**
+     * @ORM\Embedded(class = "Email")
+     *
+     * @var Email
+     */
     private Email $email;
 
     /**

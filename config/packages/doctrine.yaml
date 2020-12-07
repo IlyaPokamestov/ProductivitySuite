@@ -3,7 +3,7 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         types:
             identity: IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Type\IdentityType
-            consumer_id: IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\Type\ConsumerId
+            consumer_id: IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\Type\ConsumerIdType
             list_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Type\ListIdType
             task_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Type\TaskIdType
             owner_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Type\OwnerIdType

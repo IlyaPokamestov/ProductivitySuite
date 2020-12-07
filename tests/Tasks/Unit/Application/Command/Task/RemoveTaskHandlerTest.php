@@ -6,6 +6,7 @@ namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\
 
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\RemoveTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\RemoveTaskHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
@@ -32,11 +33,16 @@ class RemoveTaskHandlerTest extends TestCase
             ->with(\Mockery::type(Task::class))
             ->andReturnNull();
 
+        $policy = \Mockery::mock(OwnershipPolicy::class);
+        $policy->shouldReceive('verify')
+            ->with(\Mockery::type(Task::class))
+            ->andReturnNull();
+
         $command = new RemoveTask(
             Uuid::uuid4()->toString(),
         );
 
-        $handler = new RemoveTaskHandler($repository);
+        $handler = new RemoveTaskHandler($repository, $policy);
         $handler($command);
     }
 }

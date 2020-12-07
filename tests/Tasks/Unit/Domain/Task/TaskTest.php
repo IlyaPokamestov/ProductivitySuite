@@ -9,7 +9,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCreated;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskMoved;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskRemoved;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskUpdated;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCompleted;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
@@ -62,7 +62,7 @@ class TaskTest extends TestCase
         $this->assertEquals($id, $event->getId());
     }
 
-    public function testUpdated()
+    public function testComplete()
     {
         /**
          * @var Task $task
@@ -72,17 +72,15 @@ class TaskTest extends TestCase
 
         $this->assertInstanceOf(Task::class, $task);
 
-        $task->update(new Description('Updated'));
+        $task->complete();
 
         $events = $task->events();
         $this->assertCount(2, $events);
-        /** @var TaskUpdated $event */
+        /** @var TaskCompleted $event */
         $event = $events[1];
-        $this->assertInstanceOf(TaskUpdated::class, $event);
+        $this->assertInstanceOf(TaskCompleted::class, $event);
 
         $this->assertEquals($id, $event->getId());
-        $this->assertEquals('Updated', $event->getTitle());
-        $this->assertEquals('', $event->getNote());
     }
 
     public function testMoved()

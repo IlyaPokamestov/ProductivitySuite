@@ -6,9 +6,11 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository;
 
 /**
  * Class MoveTaskHandler
@@ -18,14 +20,25 @@ class MoveTaskHandler implements CommandHandlerInterface
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;
+    /** @var OwnershipPolicy */
+    private OwnershipPolicy $ownershipPolicy;
+    /** @var ListRepository */
+    private ListRepository $listRepository;
 
     /**
-     * CreateTaskHandler constructor.
+     * MoveTaskHandler constructor.
      * @param TaskRepository $taskRepository
+     * @param OwnershipPolicy $ownershipPolicy
+     * @param ListRepository $listRepository
      */
-    public function __construct(TaskRepository $taskRepository)
-    {
+    public function __construct(
+        TaskRepository $taskRepository,
+        OwnershipPolicy $ownershipPolicy,
+        ListRepository $listRepository
+    ) {
         $this->taskRepository = $taskRepository;
+        $this->ownershipPolicy = $ownershipPolicy;
+        $this->listRepository = $listRepository;
     }
 
     /**
@@ -37,10 +50,12 @@ class MoveTaskHandler implements CommandHandlerInterface
     public function __invoke(MoveTask $moveTask)
     {
         $task = $this->taskRepository->findById(new TaskId($moveTask->getId()));
+        $this->ownershipPolicy->verify($task);
 
-        //TODO: Check that target list exists.
-        //TODO: Check that target list belongs to the same owner.
-        $task->move(new ListId($moveTask->getId()));
+        $targetList = $this->listRepository->findListById(new ListId($moveTask->getListId()));
+        $this->ownershipPolicy->verify($targetList);
+
+        $task->move(new ListId($moveTask->getListId()));
 
         $this->taskRepository->save($task);
     }

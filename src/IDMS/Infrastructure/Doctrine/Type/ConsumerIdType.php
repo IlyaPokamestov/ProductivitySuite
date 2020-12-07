@@ -10,7 +10,7 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Type
 
 /**
  * Class ConsumerIdType
- * @package IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Type
+ * @package IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\Type
  */
 class ConsumerIdType extends IdentityType
 {

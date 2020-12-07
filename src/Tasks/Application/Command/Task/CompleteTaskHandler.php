@@ -7,15 +7,14 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
 
 /**
- * Class UpdateTaskHandler
+ * Class CompleteTaskHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task
  */
-class UpdateTaskHandler implements CommandHandlerInterface
+class CompleteTaskHandler implements CommandHandlerInterface
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;
@@ -23,7 +22,7 @@ class UpdateTaskHandler implements CommandHandlerInterface
     private OwnershipPolicy $ownershipPolicy;
 
     /**
-     * UpdateTaskHandler constructor.
+     * CompleteTaskHandler constructor.
      * @param TaskRepository $taskRepository
      * @param OwnershipPolicy $ownershipPolicy
      */
@@ -34,18 +33,16 @@ class UpdateTaskHandler implements CommandHandlerInterface
     }
 
     /**
-     * Update task handler.
-     *
-     * @param UpdateTask $updateTask
+     * @param CompleteTask $completeTask
      * @throws EntityNotFoundException
      */
-    public function __invoke(UpdateTask $updateTask)
+    public function __invoke(CompleteTask $completeTask)
     {
-        $task = $this->taskRepository->findById(new TaskId($updateTask->getId()));
+        $task = $this->taskRepository->findById(new TaskId($completeTask->getId()));
 
         $this->ownershipPolicy->verify($task);
 
-        $task->update(new Description($updateTask->getTitle(), $updateTask->getNote()));
+        $task->complete();
 
         $this->taskRepository->save($task);
     }

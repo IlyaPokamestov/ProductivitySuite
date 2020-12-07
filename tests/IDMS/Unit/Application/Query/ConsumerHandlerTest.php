@@ -21,6 +21,6 @@ class ConsumerHandlerTest extends TestCase
             ->andReturn($consumerDto);
 
         $handler = new ConsumerHandler($repository);
-        $this->assertEquals($consumerDto, $handler->findById(new FindById('123')));
+        $this->assertEquals($consumerDto, $handler(new FindById('123')));
     }
 }

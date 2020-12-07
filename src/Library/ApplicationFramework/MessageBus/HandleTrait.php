@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\MessageBus;
 
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Exception\LogicException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
@@ -62,6 +63,7 @@ trait HandleTrait
      * @param object|Envelope $message The message or the message pre-wrapped in an envelope
      *
      * @return mixed The handler returned value
+     * @throws \Throwable
      */
     private function handle(MessageBusInterface $messageBus, $message)
     {
@@ -74,7 +76,12 @@ trait HandleTrait
             ));
         }
 
-        $envelope = $messageBus->dispatch($message);
+        try {
+            $envelope = $messageBus->dispatch($message);
+        } catch (\Throwable $error) {
+            throw $this->unwrapHandlerFailedException($error);
+        }
+
         /** @var HandledStamp[] $handledStamps */
         $handledStamps = $envelope->all(HandledStamp::class);
 
@@ -104,5 +111,18 @@ trait HandleTrait
         }
 
         return $handledStamps[0]->getResult();
+    }
+
+    /**
+     * @param \Throwable $throwable
+     * @return \Throwable
+     */
+    private function unwrapHandlerFailedException(\Throwable $throwable): \Throwable
+    {
+        if ($throwable instanceof HandlerFailedException && \count($throwable->getNestedExceptions()) > 0) {
+            return $this->unwrapHandlerFailedException($throwable->getNestedExceptions()[0]);
+        }
+
+        return $throwable;
     }
 }

@@ -58,9 +58,7 @@ class ExceptionListener implements EventSubscriberInterface
         }
 
         $throwable = $event->getThrowable();
-        if ($throwable instanceof HandlerFailedException && \count($throwable->getNestedExceptions()) > 0) {
-            $throwable = $throwable->getNestedExceptions()[0];
-        }
+        $throwable = $this->unwrapHandlerFailedException($throwable);
 
         //TODO: Optimize this handling logic.
         if ($throwable instanceof DomainException) {
@@ -93,5 +91,18 @@ class ExceptionListener implements EventSubscriberInterface
                     break;
             }
         }
+    }
+
+    /**
+     * @param \Throwable $throwable
+     * @return \Throwable
+     */
+    private function unwrapHandlerFailedException(\Throwable $throwable): \Throwable
+    {
+        if ($throwable instanceof HandlerFailedException && \count($throwable->getNestedExceptions()) > 0) {
+            return $this->unwrapHandlerFailedException($throwable->getNestedExceptions()[0]);
+        }
+
+        return $throwable;
     }
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task;
 
-use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\QueryHandlerInterface;
 
 /**
  * Class TaskHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList
  */
-class TaskHandler implements MessageSubscriberInterface
+class TaskHandler implements QueryHandlerInterface
 {
     /** @var TaskRepository */
     public TaskRepository $taskRepository;
@@ -28,16 +28,8 @@ class TaskHandler implements MessageSubscriberInterface
      * @param FindById $findById
      * @return Task
      */
-    public function findById(FindById $findById): Task
+    public function __invoke(FindById $findById): Task
     {
         return $this->taskRepository->findTaskById($findById->getId());
-    }
-
-    /** {@inheritDoc} */
-    public static function getHandledMessages(): iterable
-    {
-        yield FindById::class => [
-            'method' => 'findById',
-        ];
     }
 }

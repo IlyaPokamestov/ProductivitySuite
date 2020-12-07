@@ -7,6 +7,7 @@ namespace IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Consumer;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerId;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository as WriteRepository;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository as ReadRepository;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
@@ -38,12 +39,7 @@ class ConsumerRepository extends ServiceEntityRepository implements WriteReposit
     /** {@inheritDoc} */
     public function findById(string $id): ReadOnlyConsumer
     {
-        /** @var Consumer|null $consumer */
-        $consumer = $this->find($id);
-
-        if (null === $consumer) {
-            throw new EntityNotFoundException('Consumer not found!');
-        }
+        $consumer = $this->findConsumerById(new ConsumerId($id));
 
         return new ReadOnlyConsumer(
             (string) $consumer->getId(),
@@ -53,5 +49,18 @@ class ConsumerRepository extends ServiceEntityRepository implements WriteReposit
             (string) $consumer->getEmail(),
             (string) $consumer->getStatus()
         );
+    }
+
+    /** {@inheritDoc} */
+    public function findConsumerById(ConsumerId $id): Consumer
+    {
+        /** @var Consumer|null $consumer */
+        $consumer = $this->find((string) $id);
+
+        if (null === $consumer) {
+            throw new EntityNotFoundException('Consumer not found!');
+        }
+
+        return $consumer;
     }
 }

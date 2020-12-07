@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\TaskList;
 
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\DomainException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnershipMismatchException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnerRegisteredPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
@@ -13,10 +13,10 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\TaskList;
 
 /**
- * Class CreateListHandler
- * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command
+ * Class RemoveListHandler
+ * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\TaskList
  */
-class CreateListHandler implements CommandHandlerInterface
+class RemoveListHandler implements CommandHandlerInterface
 {
     /** @var ListRepository */
     private ListRepository $listRepository;
@@ -35,25 +35,19 @@ class CreateListHandler implements CommandHandlerInterface
     }
 
     /**
-     * @param CreateList $createList
-     * @return string
+     * @param RemoveList $removeList
      * @throws OwnershipMismatchException
      */
-    public function __invoke(CreateList $createList): string
+    public function __invoke(RemoveList $removeList)
     {
-        $ownerId = new OwnerId($createList->getOwnerId());
-        if (TaskList::DEFAULT_LIST_NAME !== $createList->getName()) {
-            $this->ownerRegisteredPolicy->verify($ownerId);
+        $list = $this->listRepository->findListById(new ListId($removeList->getId()));
+        $this->ownerRegisteredPolicy->verify($list->getOwnerId());
+
+        if (TaskList::DEFAULT_LIST_NAME === $list->getName()) {
+            throw new DomainException('Tasks list can not be removed!');
         }
 
-        $list = TaskList::create(
-            ListId::generate(),
-            $createList->getName(),
-            $ownerId,
-        );
-
+        $list->remove();
         $this->listRepository->save($list);
-
-        return (string) $list->getId();
     }
 }

@@ -22,3 +22,29 @@ As a result, we should get a RESTful Web API service.
 ## Table of contents
 
 1) [Analysis of domain](./docs/001-analysis-of-tasks-applications.md)
+
+## Done:
+- [x] Setup Symfony 5 project.
+- [x] Setup code style checks.
+- [x] Setup containerization.
+- [x] Setup unit testing and CI.
+- [x] Setup CI.
+- [x] Implement two bounded contexts with CQRS pattern.
+- [x] Add REST presentation layer.
+- [x] Add functional tests.
+- [x] Add persistence layer.
+- [x] Establish synchronous communication between bounded contexts.
+- [x] Domain event listeners.
+- [x] Apply Saga pattern.
+
+## TODO:
+- [ ] Implement remaining REST API endpoints.
+- [ ] Fill in documentation gaps.
+- [ ] Container publishing.
+- [ ] CI: Data fixtures for functional tests.
+- [ ] CI: Run functional tests on CI.
+- [ ] Find a solution for policy checks on the query layer.
+- [ ] I do not see an easy way how to make symfony messenger listed events from other bounded
+contexts without explicit use of the domain event classes in the handlers.
+- [ ] Bring observability
+- [ ] Health checks

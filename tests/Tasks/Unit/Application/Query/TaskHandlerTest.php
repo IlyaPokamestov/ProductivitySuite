@@ -21,6 +21,6 @@ class TaskHandlerTest extends TestCase
             ->andReturn($taskDto);
 
         $handler = new TaskHandler($repository);
-        $this->assertEquals($taskDto, $handler->findById(new FindById('123')));
+        $this->assertEquals($taskDto, $handler(new FindById('123')));
     }
 }

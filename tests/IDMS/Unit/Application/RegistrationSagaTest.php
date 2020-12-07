@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Application\Command;
+namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Application;
 
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\RegisterConsumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\RegistrationHandler;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\RegistrationSaga;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Consumer;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerId;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
-class RegistrationHandlerTest extends TestCase
+class RegistrationSagaTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -30,8 +30,7 @@ class RegistrationHandlerTest extends TestCase
 
         $id = ConsumerId::next();
 
-        $handler = new RegistrationHandler($repository);
-        $this->assertEquals($id, $handler($command));
-
+        $handler = new RegistrationSaga($repository);
+        $this->assertEquals($id, $handler->initiateRegistration($command));
     }
 }

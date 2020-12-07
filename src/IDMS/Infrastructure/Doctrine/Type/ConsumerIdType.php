@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Type;
+namespace IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerId;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Type\IdentityType;
 
 /**
  * Class ConsumerIdType

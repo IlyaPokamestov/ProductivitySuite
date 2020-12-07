@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnerRegisteredPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
@@ -17,7 +18,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository;
  * Class CreateTaskHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task
  */
-class CreateTaskHandler
+class CreateTaskHandler implements CommandHandlerInterface
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;

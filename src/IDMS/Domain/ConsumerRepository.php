@@ -18,4 +18,11 @@ interface ConsumerRepository
      * @param Consumer $consumer
      */
     public function save(Consumer $consumer): void;
+
+    /**
+     * @param ConsumerId $id
+     * @return Consumer
+     * @EntityNotFoundException
+     */
+    public function findConsumerById(ConsumerId $id): Consumer;
 }

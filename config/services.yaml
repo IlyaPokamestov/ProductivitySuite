@@ -10,6 +10,22 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    _instanceof:
+        IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: tasks.command.bus }
+        IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: tasks.query.bus }
+        IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: idms.command.bus }
+        IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: idms.query.bus }
+        IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\MessageBus\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -40,40 +56,11 @@ services:
             - { name: doctrine.event_subscriber }
 
     # Buses configuration
-    idms.command_handlers:
-        namespace: IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\
-        resource: '../src/IDMS/Application/Command/*Handler.php'
-        autoconfigure: false
-        tags:
-            - { name: messenger.message_handler, bus: idms.command.bus }
-
-    idms.query_handlers:
-        namespace: IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\
-        resource: '../src/IDMS/Application/Query/*Handler.php'
-        autoconfigure: false
-        tags:
-            - { name: messenger.message_handler, bus: idms.query.bus }
-
-    tasks.command_handlers:
-        namespace: IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\
-        resource: '../src/Tasks/Application/Command/*/*Handler.php'
-        autoconfigure: false
-        tags:
-            - { name: messenger.message_handler, bus: tasks.command.bus }
-
-    tasks.query_handlers:
-        namespace: IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\
-        resource: '../src/Tasks/Application/Query/*/*Handler.php'
-        autoconfigure: false
-        tags:
-            - { name: messenger.message_handler, bus: tasks.query.bus }
-
-    event_handlers:
+    message_handlers:
         namespace: IlyaPokamestov\ProductivitySuite\
-        resource: '../src/**/*EventHandler.php'
-        autoconfigure: false
-        tags:
-            - { name: messenger.message_handler, bus: event.bus }
+        resource: '../src/**/*Handler.php'
+
+    IlyaPokamestov\ProductivitySuite\IDMS\Application\RegistrationSaga: ~
 
     # IDMS Controllers
     IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller\:
@@ -97,6 +84,15 @@ services:
             - '@tasks.query.bus'
             - '@tasks.command.bus'
         tags: [ 'controller.service_arguments' ]
+
+    # Tasks Event Handlers
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\EventListener\OnConsumerRegistrationEventHandler:
+        arguments:
+            - '@tasks.command.bus'
+
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\EventListener\OnListRemovedEventHandler:
+        arguments:
+            - '@tasks.command.bus'
 
     # Tasks REST Presentation Services
     IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\:

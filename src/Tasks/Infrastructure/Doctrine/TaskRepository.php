@@ -12,6 +12,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\TaskRepository
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\Task as ReadOnlyTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 
 /**
  * Class ListRepository
@@ -58,5 +59,18 @@ class TaskRepository extends ServiceEntityRepository implements WriteRepository,
             $task->getDescription()->getTitle(),
             (string) $task->getListId(),
         );
+    }
+
+    /** {@inheritDoc} */
+    public function removeByListId(ListId $id): void
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->delete(Task::class, 't')
+            ->where('t.listId = :listId')
+            ->setParameter('listId', (string) $id);
+
+        $qb->getQuery()->execute();
+
+        $this->getEntityManager()->flush();
     }
 }

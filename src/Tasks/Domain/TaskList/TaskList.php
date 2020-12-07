@@ -28,6 +28,8 @@ class TaskList extends AggregateRoot implements Removable, Ownerable
     use RemovableTrait;
     use OwnerableTrait;
 
+    public const DEFAULT_LIST_NAME = 'Tasks';
+
     /**
      * @ORM\Id()
      * @ORM\Column(type="list_id")

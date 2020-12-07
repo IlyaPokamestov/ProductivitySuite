@@ -11,16 +11,16 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 
 /**
- * Class MoveTaskHandler
+ * Class RemoveListTasksHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task
  */
-class MoveTaskHandler implements CommandHandlerInterface
+class RemoveListTasksHandler implements CommandHandlerInterface
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;
 
     /**
-     * CreateTaskHandler constructor.
+     * RemoveListTasksHandler constructor.
      * @param TaskRepository $taskRepository
      */
     public function __construct(TaskRepository $taskRepository)
@@ -29,19 +29,10 @@ class MoveTaskHandler implements CommandHandlerInterface
     }
 
     /**
-     * Move task handler.
-     *
-     * @param MoveTask $moveTask
-     * @throws EntityNotFoundException
+     * @param RemoveAllTasksWhichBelongsToList $removeTasks
      */
-    public function __invoke(MoveTask $moveTask)
+    public function __invoke(RemoveAllTasksWhichBelongsToList $removeTasks)
     {
-        $task = $this->taskRepository->findById(new TaskId($moveTask->getId()));
-
-        //TODO: Check that target list exists.
-        //TODO: Check that target list belongs to the same owner.
-        $task->move(new ListId($moveTask->getId()));
-
-        $this->taskRepository->save($task);
+        $this->taskRepository->removeByListId(new ListId($removeTasks->getId()));
     }
 }

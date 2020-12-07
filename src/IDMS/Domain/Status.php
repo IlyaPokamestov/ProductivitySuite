@@ -64,4 +64,13 @@ final class Status
     {
         return $this->status;
     }
+
+    /**
+     * @param Status $status
+     * @return bool
+     */
+    public function equal(Status $status): bool
+    {
+        return $this->status === (string) $status;
+    }
 }

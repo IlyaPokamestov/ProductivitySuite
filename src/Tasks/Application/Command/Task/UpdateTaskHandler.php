@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
@@ -14,7 +15,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
  * Class UpdateTaskHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task
  */
-class UpdateTaskHandler
+class UpdateTaskHandler implements CommandHandlerInterface
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;

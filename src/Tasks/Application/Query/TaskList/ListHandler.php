@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList;
 
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\QueryHandlerInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
-use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository as DomainListRepository;
 
 /**
  * Class ListHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList
  */
-class ListHandler implements MessageSubscriberInterface
+class ListHandler implements QueryHandlerInterface
 {
     /** @var ListRepository */
     public ListRepository $listRepository;
@@ -35,7 +35,7 @@ class ListHandler implements MessageSubscriberInterface
      * @param FindById $findById
      * @return TaskList
      */
-    public function findById(FindById $findById): TaskList
+    public function __invoke(FindById $findById): TaskList
     {
         //TODO: Find a better way how to verify ownership on view model.
         if ($this->listRepository instanceof DomainListRepository) {
@@ -46,13 +46,5 @@ class ListHandler implements MessageSubscriberInterface
 
 
         return $this->listRepository->findById($findById->getId());
-    }
-
-    /** {@inheritDoc} */
-    public static function getHandledMessages(): iterable
-    {
-        yield FindById::class => [
-            'method' => 'findById',
-        ];
     }
 }

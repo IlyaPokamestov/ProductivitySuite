@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 
 /**
  * Interface TaskRepository
@@ -28,4 +29,11 @@ interface TaskRepository
      * @param Task $task
      */
     public function save(Task $task): void;
+
+    /**
+     * Remove all tasks which belongs to list with provided ID.
+     *
+     * @param ListId $id
+     */
+    public function removeByListId(ListId $id): void;
 }

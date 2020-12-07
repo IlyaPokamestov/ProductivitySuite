@@ -20,7 +20,7 @@ interface TaskRepository
      *
      * @throws EntityNotFoundException
      */
-    public function find(TaskId $id): Task;
+    public function findById(TaskId $id): Task;
 
     /**
      * Save task.

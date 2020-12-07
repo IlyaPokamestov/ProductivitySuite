@@ -5,16 +5,28 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Description
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task
+ *
+ * @ORM\Embeddable
  */
 final class Description
 {
-    /** @var string */
+    /**
+     * @ORM\Column(type="string", length=150)
+     *
+     * @var string
+     */
     private string $title;
-    /** @var string */
+
+    /**
+     * @ORM\Column(type="text", length=1000)
+     *
+     * @var string
+     */
     private string $note;
 
     /**

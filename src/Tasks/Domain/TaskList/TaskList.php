@@ -8,14 +8,35 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoo
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Assert;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Removable;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\RemovableTrait;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Class TaskList
+ * @package IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList
+ *
+ * List aggregate root.
+ * PHP does not allow to call class List at the moment, probably this is changed in PHP ^8.0
+ *
+ * @ORM\Entity()
+ * @ORM\Table(name="list")
+ */
 class TaskList extends AggregateRoot implements Removable
 {
     use RemovableTrait;
 
-    /** @var ListId */
+    /**
+     * @ORM\Id()
+     * @ORM\Column(type="list_id")
+     *
+     * @var ListId
+     */
     private ListId $id;
-    /** @var string */
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     private string $name;
 
     /**

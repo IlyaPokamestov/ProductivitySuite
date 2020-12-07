@@ -30,7 +30,7 @@ class TaskHandler implements MessageSubscriberInterface
      */
     public function findById(FindById $findById): Task
     {
-        return $this->taskRepository->findById($findById->getId());
+        return $this->taskRepository->findTaskById($findById->getId());
     }
 
     /** {@inheritDoc} */

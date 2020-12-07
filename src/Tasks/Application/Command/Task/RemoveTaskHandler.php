@@ -34,7 +34,7 @@ class RemoveTaskHandler
      */
     public function __invoke(RemoveTask $removeTask)
     {
-        $task = $this->taskRepository->find(new TaskId($removeTask->getId()));
+        $task = $this->taskRepository->findById(new TaskId($removeTask->getId()));
 
         $task->remove();
 

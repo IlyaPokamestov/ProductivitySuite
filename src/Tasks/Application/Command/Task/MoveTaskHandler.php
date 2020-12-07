@@ -35,7 +35,7 @@ class MoveTaskHandler
      */
     public function __invoke(MoveTask $moveTask)
     {
-        $task = $this->taskRepository->find(new TaskId($moveTask->getId()));
+        $task = $this->taskRepository->findById(new TaskId($moveTask->getId()));
 
         //TODO: Check that target list exists.
         //TODO: Check that target list belongs to the same owner.

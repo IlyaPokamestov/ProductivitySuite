@@ -19,5 +19,5 @@ interface TaskRepository
      * @return Task
      * @throws EntityNotFoundException
      */
-    public function findById(string $id): Task;
+    public function findTaskById(string $id): Task;
 }

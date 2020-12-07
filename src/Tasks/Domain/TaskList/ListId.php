@@ -10,6 +10,6 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Identity;
  * Class ListId
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList
  */
-class ListId extends Identity
+final class ListId extends Identity
 {
 }

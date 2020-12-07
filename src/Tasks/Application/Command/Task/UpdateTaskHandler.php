@@ -35,7 +35,7 @@ class UpdateTaskHandler
      */
     public function __invoke(UpdateTask $updateTask)
     {
-        $task = $this->taskRepository->find(new TaskId($updateTask->getId()));
+        $task = $this->taskRepository->findById(new TaskId($updateTask->getId()));
 
         $task->update(new Description($updateTask->getTitle(), $updateTask->getNote()));
 

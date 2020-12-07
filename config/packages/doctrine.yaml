@@ -17,3 +17,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/IDMS/Domain'
                 prefix: 'IlyaPokamestov\ProductivitySuite\IDMS\Domain'
                 alias: IDMS
+            Tasks:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Tasks/Domain'
+                prefix: 'IlyaPokamestov\ProductivitySuite\Tasks\Domain'
+                alias: Tasks

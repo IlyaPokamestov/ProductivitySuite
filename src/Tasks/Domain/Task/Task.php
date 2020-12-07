@@ -12,20 +12,39 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskMoved;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskRemoved;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskUpdated;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Task
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task
+ *
+ * @ORM\Entity()
+ * @ORM\Table(name="task")
  */
 class Task extends AggregateRoot implements Removable
 {
     use RemovableTrait;
 
-    /** @var TaskId */
+    /**
+     * @ORM\Id()
+     * @ORM\Column(type="task_id")
+     *
+     * @var TaskId
+     */
     private TaskId $id;
-    /** @var ListId */
+
+    /**
+     * @ORM\Column(type="list_id")
+     *
+     * @var ListId
+     */
     private ListId $listId;
-    /** @var Description */
+
+    /**
+     * @ORM\Embedded(class = "Description")
+     *
+     * @var Description
+     */
     private Description $description;
 
     /**

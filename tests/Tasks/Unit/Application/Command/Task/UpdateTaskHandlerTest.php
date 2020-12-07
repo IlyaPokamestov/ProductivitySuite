@@ -26,7 +26,7 @@ class UpdateTaskHandlerTest extends TestCase
             ->andReturnNull();
 
         $repository = \Mockery::mock(TaskRepository::class);
-        $repository->shouldReceive('find')
+        $repository->shouldReceive('findById')
             ->with(\Mockery::type(TaskId::class))
             ->andReturn($task);
         $repository->shouldReceive('save')

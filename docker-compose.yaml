@@ -28,7 +28,7 @@ services:
     environment:
       APP_ENV: dev
       APP_DEBUG: 1
-      DATABASE_URL: postgresql://psuite_app:psuite_app_pass@database:5432/productivity_suite?charset=UTF8
+      DATABASE_URL: postgresql://psuite_app:psuite_app_pass@database:5432/productivity_suite?charset=UTF8&serverVersion=13
 
   database:
     image: postgres:13.1

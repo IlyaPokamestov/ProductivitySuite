@@ -6,20 +6,37 @@ namespace IlyaPokamestov\ProductivitySuite\IDMS\Domain;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Assert;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\InvalidArgumentException;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Name
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Domain
  *
  * VO which represents consumer name.
+ *
+ * @ORM\Embeddable
  */
 final class Name
 {
-    /** @var string */
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     private string $username;
-    /** @var string */
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     private string $firstName;
-    /** @var string */
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     private string $lastName;
 
     /**

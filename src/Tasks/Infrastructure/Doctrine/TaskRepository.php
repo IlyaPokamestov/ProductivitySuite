@@ -25,9 +25,6 @@ class TaskRepository extends ServiceEntityRepository implements WriteRepository,
         parent::__construct($registry, Task::class);
     }
 
-    /** @var array */
-    private array $tasks = [];
-
     /** {@inheritDoc} */
     public function save(Task $task): void
     {
@@ -42,7 +39,7 @@ class TaskRepository extends ServiceEntityRepository implements WriteRepository,
     /** {@inheritDoc} */
     public function findById(TaskId $id): Task
     {
-        /** @var Task $task */
+        /** @var Task|null $task */
         $task = $this->find((string) $id);
         if (null === $task) {
             throw new EntityNotFoundException('Task not found!');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Domain\Task;
 
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCreated;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskMoved;
@@ -24,7 +25,7 @@ class TaskTest extends TestCase
          * @var string $id
          * @var string $listId
          */
-        [$task, $id, $listId] = $this->taskFixture();
+        [$task, $id, $listId, $ownerId] = $this->taskFixture();
 
         $this->assertInstanceOf(Task::class, $task);
         $events = $task->events();
@@ -37,6 +38,7 @@ class TaskTest extends TestCase
         $this->assertEquals($listId, $event->getListId());
         $this->assertEquals('Do that!',  $event->getTitle());
         $this->assertEquals('now!', $event->getNote());
+        $this->assertEquals($ownerId, $event->getOwnerId());
     }
 
     public function testRemoval()
@@ -113,11 +115,13 @@ class TaskTest extends TestCase
     {
         $id = Uuid::uuid4()->toString();
         $listId = Uuid::uuid4()->toString();
+        $ownerId = Uuid::uuid4()->toString();
 
         return [
-            Task::create(new TaskId($id), new ListId($listId), new Description('Do that!', 'now!')),
+            Task::create(new TaskId($id), new ListId($listId), new Description('Do that!', 'now!'), new OwnerId($ownerId)),
             $id,
-            $listId
+            $listId,
+            $ownerId
         ];
     }
 }

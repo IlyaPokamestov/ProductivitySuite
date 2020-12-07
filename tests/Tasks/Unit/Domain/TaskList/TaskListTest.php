@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Domain\TaskList;
 
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListCreated;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRemoved;
@@ -16,7 +17,8 @@ class TaskListTest extends TestCase
     public function testCreation()
     {
         $id = Uuid::uuid4()->toString();
-        $list = TaskList::create(new ListId($id), 'Default');
+        $ownerId = Uuid::uuid4()->toString();
+        $list = TaskList::create(new ListId($id), 'Default', new OwnerId($ownerId));
 
         $this->assertInstanceOf(TaskList::class, $list);
         $events = $list->events();
@@ -27,12 +29,14 @@ class TaskListTest extends TestCase
 
         $this->assertEquals($id, $event->getId());
         $this->assertEquals('Default', $event->getName());
+        $this->assertEquals($ownerId, $event->getOwnerId());
     }
 
     public function testRemoval()
     {
         $id = Uuid::uuid4()->toString();
-        $list = TaskList::create(new ListId($id), 'Default');
+        $ownerId = Uuid::uuid4()->toString();
+        $list = TaskList::create(new ListId($id), 'Default', new OwnerId($ownerId));
 
         $this->assertInstanceOf(TaskList::class, $list);
 

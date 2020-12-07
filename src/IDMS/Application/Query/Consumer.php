@@ -35,19 +35,42 @@ class Consumer
     private string $email;
 
     /**
+     * @Serializer\Exclude()
+     *
+     * @var string
+     */
+    private string $status;
+
+    /**
      * Consumer constructor.
      * @param string $id
      * @param string $username
      * @param string $firstName
      * @param string $lastName
      * @param string $email
+     * @param string $status
      */
-    public function __construct(string $id, string $username, string $firstName, string $lastName, string $email)
-    {
+    public function __construct(
+        string $id,
+        string $username,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $status
+    ) {
         $this->id = $id;
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }

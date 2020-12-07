@@ -19,7 +19,9 @@ final class TaskCreated implements Event
     /** @var string */
     private string $title;
     /** @var string */
-    private string $note;
+    private string $note = '';
+    /** @var string */
+    private string $ownerId;
 
     /**
      * TaskCreated constructor.
@@ -27,13 +29,15 @@ final class TaskCreated implements Event
      * @param string $listId
      * @param string $title
      * @param string $note
+     * @param string $ownerId
      */
-    public function __construct(string $id, string $listId, string $title, string $note)
+    public function __construct(string $id, string $listId, string $title, string $note, string $ownerId)
     {
         $this->id = $id;
         $this->listId = $listId;
         $this->title = $title;
         $this->note = $note;
+        $this->ownerId = $ownerId;
     }
 
     /**
@@ -66,5 +70,13 @@ final class TaskCreated implements Event
     public function getNote(): string
     {
         return $this->note;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerId(): string
+    {
+        return $this->ownerId;
     }
 }

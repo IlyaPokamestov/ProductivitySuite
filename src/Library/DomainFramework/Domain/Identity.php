@@ -6,6 +6,10 @@ namespace IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain;
 
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Class Identity
+ * @package IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain
+ */
 class Identity
 {
     /** @var string|null */
@@ -32,7 +36,7 @@ class Identity
     /**
      * Generate identity.
      *
-     * @return static
+     * @return string
      */
     public static function next(): string
     {

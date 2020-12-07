@@ -40,9 +40,7 @@ class ResponseListener implements EventSubscriberInterface
         $groups = $event->getRequest()->attributes->get('groups', []);
         $response = $this->toJson($result, $groups);
 
-        if ($response) {
-            $event->setResponse($response);
-        }
+        $event->setResponse($response);
     }
 
     /** {@inheritdoc} */

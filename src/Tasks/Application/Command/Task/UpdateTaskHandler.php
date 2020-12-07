@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
@@ -17,14 +18,18 @@ class UpdateTaskHandler
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;
+    /** @var OwnershipPolicy */
+    private OwnershipPolicy $ownershipPolicy;
 
     /**
-     * CreateTaskHandler constructor.
+     * UpdateTaskHandler constructor.
      * @param TaskRepository $taskRepository
+     * @param OwnershipPolicy $ownershipPolicy
      */
-    public function __construct(TaskRepository $taskRepository)
+    public function __construct(TaskRepository $taskRepository, OwnershipPolicy $ownershipPolicy)
     {
         $this->taskRepository = $taskRepository;
+        $this->ownershipPolicy = $ownershipPolicy;
     }
 
     /**
@@ -36,6 +41,8 @@ class UpdateTaskHandler
     public function __invoke(UpdateTask $updateTask)
     {
         $task = $this->taskRepository->findById(new TaskId($updateTask->getId()));
+
+        $this->ownershipPolicy->verify($task);
 
         $task->update(new Description($updateTask->getTitle(), $updateTask->getNote()));
 

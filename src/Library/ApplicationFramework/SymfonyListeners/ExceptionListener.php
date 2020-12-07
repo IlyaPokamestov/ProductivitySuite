@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\SymfonyListeners;
 
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\AccessDeniedException;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\AuthorizationException;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\DomainException;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\Error;
@@ -60,16 +62,35 @@ class ExceptionListener implements EventSubscriberInterface
             $throwable = $throwable->getNestedExceptions()[0];
         }
 
+        //TODO: Optimize this handling logic.
         if ($throwable instanceof DomainException) {
             $error = $this->serializer->serialize(Error::wrap($throwable), 'json');
-            if ($throwable instanceof EntityNotFoundException) {
-                $event->setResponse(
-                    new JsonResponse($error, Response::HTTP_NOT_FOUND, [], true)
-                );
-            } else {
-                $event->setResponse(
-                    new JsonResponse($error, Response::HTTP_BAD_REQUEST, [], true)
-                );
+
+            switch (true) {
+                case $throwable instanceof EntityNotFoundException:
+                    $event->setResponse(
+                        new JsonResponse($error, Response::HTTP_NOT_FOUND, [], true)
+                    );
+
+                    break;
+                case $throwable instanceof AuthorizationException:
+                    $event->setResponse(
+                        new JsonResponse($error, Response::HTTP_UNAUTHORIZED, [], true)
+                    );
+
+                    break;
+                case $throwable instanceof AccessDeniedException:
+                    $event->setResponse(
+                        new JsonResponse($error, Response::HTTP_FORBIDDEN, [], true)
+                    );
+
+                    break;
+                default:
+                    $event->setResponse(
+                        new JsonResponse($error, Response::HTTP_BAD_REQUEST, [], true)
+                    );
+
+                    break;
             }
         }
     }

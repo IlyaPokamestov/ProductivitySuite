@@ -38,7 +38,7 @@ class ConsumerRepository extends ServiceEntityRepository implements WriteReposit
     /** {@inheritDoc} */
     public function findById(string $id): ReadOnlyConsumer
     {
-        /** @var Consumer $consumer */
+        /** @var Consumer|null $consumer */
         $consumer = $this->find($id);
 
         if (null === $consumer) {
@@ -51,6 +51,7 @@ class ConsumerRepository extends ServiceEntityRepository implements WriteReposit
             $consumer->getName()->getFirstName(),
             $consumer->getName()->getLastName(),
             (string) $consumer->getEmail(),
+            (string) $consumer->getStatus()
         );
     }
 }

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task;
 
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnerRegisteredPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository;
 
 /**
  * Class CreateTaskHandler
@@ -18,14 +21,25 @@ class CreateTaskHandler
 {
     /** @var TaskRepository */
     private TaskRepository $taskRepository;
+    /** @var OwnerRegisteredPolicy */
+    private OwnerRegisteredPolicy $ownerRegisteredPolicy;
+    /** @var ListRepository */
+    private ListRepository $listRepository;
 
     /**
      * CreateTaskHandler constructor.
      * @param TaskRepository $taskRepository
+     * @param OwnerRegisteredPolicy $ownerRegisteredPolicy
+     * @param ListRepository $listRepository
      */
-    public function __construct(TaskRepository $taskRepository)
-    {
+    public function __construct(
+        TaskRepository $taskRepository,
+        OwnerRegisteredPolicy $ownerRegisteredPolicy,
+        ListRepository $listRepository
+    ) {
         $this->taskRepository = $taskRepository;
+        $this->ownerRegisteredPolicy = $ownerRegisteredPolicy;
+        $this->listRepository = $listRepository;
     }
 
     /**
@@ -34,12 +48,17 @@ class CreateTaskHandler
      */
     public function __invoke(CreateTask $createTask): string
     {
-        //TODO: Check that list exists.
+        $ownerId = new OwnerId($createTask->getOwnerId());
+        $this->ownerRegisteredPolicy->verify($ownerId);
+
+        $listId = new ListId($createTask->getListId());
+        $this->listRepository->findListById($listId);
 
         $task = Task::create(
             TaskId::generate(),
-            new ListId($createTask->getListId()),
-            new Description($createTask->getTitle(), $createTask->getNote())
+            $listId,
+            new Description($createTask->getTitle(), $createTask->getNote()),
+            $ownerId
         );
 
         $this->taskRepository->save($task);

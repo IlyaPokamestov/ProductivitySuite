@@ -19,12 +19,17 @@
                 "conditions": []
             },
             {
-                "action": "bin/phpunit --testsuite unit",
+                "action": "phpcs --standard=PSR12 src",
                 "options": [],
                 "conditions": []
             },
             {
-                "action": "phpcs --standard=PSR12 src",
+                "action": "vendor/bin/phpstan analyse src",
+                "options": [],
+                "conditions": []
+            },
+            {
+                "action": "bin/phpunit --testsuite unit",
                 "options": [],
                 "conditions": []
             }

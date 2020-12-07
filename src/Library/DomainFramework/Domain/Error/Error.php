@@ -26,7 +26,7 @@ class Error
      * Error constructor.
      * @param string $message
      */
-    public function __construct(string $message)
+    final public function __construct(string $message)
     {
         $this->message = $message;
     }

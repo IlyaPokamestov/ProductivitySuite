@@ -55,7 +55,7 @@ class Consumer extends AggregateRoot
      * @param Name $name
      * @param Email $email
      */
-    public function __construct(ConsumerId $id, Name $name, Email $email)
+    final public function __construct(ConsumerId $id, Name $name, Email $email)
     {
         $this->name = $name;
         $this->id = $id;

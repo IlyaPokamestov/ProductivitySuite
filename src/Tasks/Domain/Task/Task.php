@@ -45,7 +45,7 @@ class Task extends AggregateRoot implements Removable
      * @param ListId $listId
      * @param Description $description
      */
-    public function __construct(TaskId $id, ListId $listId, Description $description)
+    final public function __construct(TaskId $id, ListId $listId, Description $description)
     {
         $this->id = $id;
         $this->listId = $listId;

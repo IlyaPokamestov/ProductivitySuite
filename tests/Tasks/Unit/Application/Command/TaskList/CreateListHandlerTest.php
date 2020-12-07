@@ -8,6 +8,8 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTaskHandler;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\TaskList\CreateList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\TaskList\CreateListHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnerRegisteredPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
@@ -28,12 +30,18 @@ class CreateListHandlerTest extends TestCase
             ->with(\Mockery::type(TaskList::class))
             ->andReturnNull();
 
+        $policy = \Mockery::mock(OwnerRegisteredPolicy::class);
+        $policy->shouldReceive('verify')
+            ->with(\Mockery::type(OwnerId::class))
+            ->andReturnNull();
+
         $command = new CreateList(
             'Default',
+            Uuid::uuid4()->toString()
         );
 
         $id = ListId::next();
-        $handler = new CreateListHandler($repository);
+        $handler = new CreateListHandler($repository, $policy);
         $this->assertEquals($id, $handler($command));
     }
 }

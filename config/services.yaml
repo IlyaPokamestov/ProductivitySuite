@@ -83,6 +83,13 @@ services:
             - '@idms.command.bus'
         tags: [ 'controller.service_arguments' ]
 
+    # IDMS Internal Services
+    IlyaPokamestov\ProductivitySuite\IDMS\Presentation\Internal\:
+        resource: '../src/IDMS/Presentation/Internal/'
+        arguments:
+            - '@idms.query.bus'
+            - '@idms.command.bus'
+
     # Tasks Controllers
     IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\:
         resource: '../src/Tasks/Presentation/REST/Controller/'
@@ -90,3 +97,12 @@ services:
             - '@tasks.query.bus'
             - '@tasks.command.bus'
         tags: [ 'controller.service_arguments' ]
+
+    # Tasks REST Presentation Services
+    IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\:
+        resource: '../src/Tasks/Presentation/REST/*'
+        exclude: '../src/Tasks/Presentation/REST/{Controller}'
+
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\RequestBasedOwnershipPolicy'
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnerRegisteredPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\IDMS\CheckConsumerStatus'
+

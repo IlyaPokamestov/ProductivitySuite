@@ -16,16 +16,20 @@ final class ListCreated implements Event
     private string $id;
     /** @var string */
     private string $name;
+    /** @var string */
+    private string $ownerId;
 
     /**
      * ListCreated constructor.
      * @param string $id
      * @param string $name
+     * @param string $ownerId
      */
-    public function __construct(string $id, string $name)
+    public function __construct(string $id, string $name, string $ownerId)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->ownerId = $ownerId;
     }
 
     /**
@@ -42,5 +46,13 @@ final class ListCreated implements Event
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerId(): string
+    {
+        return $this->ownerId;
     }
 }

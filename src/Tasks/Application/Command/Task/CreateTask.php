@@ -15,24 +15,31 @@ class CreateTask
     /** @var string */
     private string $title;
     /** @var string */
-    private string $note = '';
+    private string $note;
     /**
-     * @var ?string
+     * @var string
      * @Serializer\SerializedName("listId")
      */
-    private ?string $listId;
+    private string $listId;
+    /**
+     * @var string
+     * @Serializer\SerializedName("ownerId")
+     */
+    private string $ownerId;
 
     /**
      * CreateTask constructor.
      * @param string $title
      * @param string $note
-     * @param ?string $listId
+     * @param string $listId
+     * @param string $ownerId
      */
-    public function __construct(string $title, string $note, ?string $listId = null)
+    public function __construct(string $title, string $note, string $listId, string $ownerId)
     {
         $this->title = $title;
         $this->note = $note;
         $this->listId = $listId;
+        $this->ownerId = $ownerId;
     }
 
     /**
@@ -52,10 +59,18 @@ class CreateTask
     }
 
     /**
-     * @return ?string
+     * @return string
      */
-    public function getListId(): ?string
+    public function getListId(): string
     {
         return $this->listId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerId(): string
+    {
+        return $this->ownerId;
     }
 }

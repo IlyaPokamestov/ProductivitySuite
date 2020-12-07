@@ -9,6 +9,9 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Assert;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Removable;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\RemovableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Ownerable;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerableTrait;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 
 /**
  * Class TaskList
@@ -20,9 +23,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="list")
  */
-class TaskList extends AggregateRoot implements Removable
+class TaskList extends AggregateRoot implements Removable, Ownerable
 {
     use RemovableTrait;
+    use OwnerableTrait;
 
     /**
      * @ORM\Id()
@@ -42,26 +46,29 @@ class TaskList extends AggregateRoot implements Removable
     /**
      * @param ListId $id
      * @param string $name
+     * @param OwnerId $owner
      * @return static
      */
-    public static function create(ListId $id, string $name): self
+    public static function create(ListId $id, string $name, OwnerId $owner): self
     {
-        return new static($id, $name);
+        return new static($id, $name, $owner);
     }
 
     /**
-     * TaskList constructor.
+     * List constructor.
      * @param ListId $id
      * @param string $name
+     * @param OwnerId $owner
      */
-    final public function __construct(ListId $id, string $name)
+    final public function __construct(ListId $id, string $name, OwnerId $owner)
     {
         Assert::stringNotEmpty($name, 'Name can not be empty!');
 
         $this->id = $id;
         $this->name = $name;
+        $this->ownerId = $owner;
 
-        $this->record(new ListCreated((string) $id, $name));
+        $this->record(new ListCreated((string) $id, $name, (string) $owner));
     }
 
     /**

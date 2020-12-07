@@ -37,6 +37,13 @@ class Consumer extends AggregateRoot
     private Email $email;
 
     /**
+     * @ORM\Embedded(class = "Status")
+     *
+     * @var Status
+     */
+    private Status $status;
+
+    /**
      * Register consumer.
      *
      * @param ConsumerId $id
@@ -46,7 +53,7 @@ class Consumer extends AggregateRoot
      */
     public static function register(ConsumerId $id, Name $name, Email $email): self
     {
-        return new static($id, $name, $email);
+        return new static($id, $name, $email, Status::registrationInProgress());
     }
 
     /**
@@ -54,19 +61,35 @@ class Consumer extends AggregateRoot
      * @param ConsumerId $id
      * @param Name $name
      * @param Email $email
+     * @param Status $status
      */
-    final public function __construct(ConsumerId $id, Name $name, Email $email)
+    final public function __construct(ConsumerId $id, Name $name, Email $email, Status $status)
     {
         $this->name = $name;
         $this->id = $id;
         $this->email = $email;
+        $this->status = $status;
 
-        $this->record(new ConsumerRegistered(
-            $id->id(),
-            $name->getUsername(),
-            $name->getFirstName(),
-            $name->getLastName(),
-            (string) $email
+        $this->record(new RegistrationInitiated(
+            (string) $this->id,
+            $this->name->getUsername(),
+            $this->name->getFirstName(),
+            $this->name->getLastName(),
+            (string) $this->email,
+            (string) $this->status
+        ));
+    }
+
+    /**
+     * Complete registration after all the components setup.
+     */
+    public function completeRegistration(): void
+    {
+        $this->status = Status::active();
+
+        $this->record(new RegistrationCompleted(
+            (string) $this->id,
+            (string) $this->status
         ));
     }
 
@@ -92,5 +115,13 @@ class Consumer extends AggregateRoot
     public function getEmail(): Email
     {
         return $this->email;
+    }
+
+    /**
+     * @return Status
+     */
+    public function getStatus(): Status
+    {
+        return $this->status;
     }
 }

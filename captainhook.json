@@ -24,7 +24,7 @@
                 "conditions": []
             },
             {
-                "action": "vendor/bin/phpstan analyse src",
+                "action": "vendor/bin/phpstan analyse -l 5 src",
                 "options": [],
                 "conditions": []
             },

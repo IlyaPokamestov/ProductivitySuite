@@ -15,7 +15,7 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Event;
  * (but it's of course possible to serialize objects)
  * - other bounded contexts which listed those event's shouldn't depend on the events from another bounded context
  */
-final class ConsumerRegistered implements Event
+final class RegistrationInitiated implements Event
 {
     /** @var string */
     private string $id;
@@ -27,6 +27,8 @@ final class ConsumerRegistered implements Event
     private string $lastName;
     /** @var string */
     private string $email;
+    /** @var string */
+    private string $status;
 
     /**
      * ConsumerRegistered constructor.
@@ -35,14 +37,22 @@ final class ConsumerRegistered implements Event
      * @param string $firstName
      * @param string $lastName
      * @param string $email
+     * @param string $status
      */
-    public function __construct(string $id, string $username, string $firstName, string $lastName, string $email)
-    {
+    public function __construct(
+        string $id,
+        string $username,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $status
+    ) {
         $this->id = $id;
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->status = $status;
     }
 
     /**
@@ -83,5 +93,13 @@ final class ConsumerRegistered implements Event
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }

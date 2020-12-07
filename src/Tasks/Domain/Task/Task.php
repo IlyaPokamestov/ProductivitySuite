@@ -7,6 +7,9 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoot;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Removable;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\RemovableTrait;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Ownerable;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerableTrait;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCreated;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskMoved;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskRemoved;
@@ -21,9 +24,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="task")
  */
-class Task extends AggregateRoot implements Removable
+class Task extends AggregateRoot implements Removable, Ownerable
 {
     use RemovableTrait;
+    use OwnerableTrait;
 
     /**
      * @ORM\Id()
@@ -51,11 +55,12 @@ class Task extends AggregateRoot implements Removable
      * @param TaskId $id
      * @param ListId $listId
      * @param Description $description
+     * @param OwnerId $ownerId
      * @return static
      */
-    public static function create(TaskId $id, ListId $listId, Description $description): self
+    public static function create(TaskId $id, ListId $listId, Description $description, OwnerId $ownerId): self
     {
-        return new static($id, $listId, $description);
+        return new static($id, $listId, $description, $ownerId);
     }
 
     /**
@@ -63,18 +68,21 @@ class Task extends AggregateRoot implements Removable
      * @param TaskId $id
      * @param ListId $listId
      * @param Description $description
+     * @param OwnerId $ownerId
      */
-    final public function __construct(TaskId $id, ListId $listId, Description $description)
+    final public function __construct(TaskId $id, ListId $listId, Description $description, OwnerId $ownerId)
     {
         $this->id = $id;
         $this->listId = $listId;
         $this->description = $description;
+        $this->ownerId = $ownerId;
 
         $this->record(new TaskCreated(
             (string) $id,
             (string) $listId,
             $description->getTitle(),
-            $description->getNote()
+            $description->getNote(),
+            (string) $ownerId
         ));
     }
 

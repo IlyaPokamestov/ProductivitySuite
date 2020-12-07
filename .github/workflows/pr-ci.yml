@@ -31,7 +31,7 @@ jobs:
       # Docs: https://getcomposer.org/doc/articles/scripts.md
 
       - name: Run static analysis
-        run: vendor/bin/phpstan analyse src
+        run: vendor/bin/phpstan analyse -l 5 src
       - name: Run unit suite
         run: bin/phpunit --coverage-text --printer mheap\\GithubActionsReporter\\Printer --testsuite unit
 #      - name: Run functional suite

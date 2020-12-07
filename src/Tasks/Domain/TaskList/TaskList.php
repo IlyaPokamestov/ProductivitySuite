@@ -33,7 +33,7 @@ class TaskList extends AggregateRoot implements Removable
      * @param ListId $id
      * @param string $name
      */
-    public function __construct(ListId $id, string $name)
+    final public function __construct(ListId $id, string $name)
     {
         Assert::stringNotEmpty($name, 'Name can not be empty!');
 

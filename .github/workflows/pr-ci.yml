@@ -30,6 +30,8 @@ jobs:
       # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
       # Docs: https://getcomposer.org/doc/articles/scripts.md
 
+      - name: Run static analysis
+        run: vendor/bin/phpstan analyse src
       - name: Run unit suite
         run: bin/phpunit --coverage-text --printer mheap\\GithubActionsReporter\\Printer --testsuite unit
 #      - name: Run functional suite

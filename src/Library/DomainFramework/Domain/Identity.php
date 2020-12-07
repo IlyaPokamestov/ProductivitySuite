@@ -45,7 +45,7 @@ class Identity
      * Identity constructor.
      * @param string $id
      */
-    public function __construct(string $id)
+    final public function __construct(string $id)
     {
         Assert::uuid($id, 'ID is invalid.');
 

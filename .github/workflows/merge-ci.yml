@@ -29,3 +29,17 @@ jobs:
 
       - name: Run all tests
         run: bin/phpunit --coverage-text --printer mheap\\GithubActionsReporter\\Printer --testsuite unit
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          tags: user/app:latest
+          name: Build and push
+            id: docker_build
+            uses: docker/build-push-action@v2
+            with:
+              push: true
+              tags: IlyaPokamestov/ProductivitySuite:latest
+              secrets: |
+                GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}

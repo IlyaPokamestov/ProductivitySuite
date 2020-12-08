@@ -76,7 +76,7 @@
             "bin/console doctrine:database:create --env=test --no-interaction",
             "bin/console doctrine:migrations:migrate --env=test --no-interaction",
             "bin/console doctrine:fixtures:load --env=test --no-interaction",
-            "bin/phpunit --coverage-text tests/Tasks/Functional/ListApiTest.php"
+            "bin/phpunit --coverage-text --testsuite functional"
         ]
     },
     "conflict": {

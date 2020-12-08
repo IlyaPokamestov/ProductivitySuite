@@ -39,12 +39,12 @@ As a result, we should get a RESTful Web API service.
 - [x] Apply Saga pattern.
 - [x] Implement remaining REST API endpoints.
 - [x] Generated OpenAPI v3 specification/documentation.
+- [x] CI: Data fixtures for functional tests.
+- [x] CI: Run functional tests on CI.
 
 ## TODO:
 - [ ] Fill in documentation gaps.
 - [ ] Container publishing.
-- [ ] CI: Data fixtures for functional tests.
-- [ ] CI: Run functional tests on CI.
 - [ ] Find a solution for policy checks on the query layer.
 - [ ] I do not see an easy way how to make symfony messenger listed events from other bounded
 contexts without explicit use of the domain event classes in the handlers.

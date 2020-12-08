@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "d28ed528-6b66-4eec-bb43-485d68611bab",
+		"name": "[IlyaPokamestov] ProductivitySuite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "IDMS",
+			"item": [
+				{
+					"name": "Register Consumer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"IlyaPokamestov\",\n    \"firstName\": \"Ilya\",\n    \"lastName\": \"Pokamestov\",\n    \"email\": \"test@test.com\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "productivity.suite.local/api/v1/consumers",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"consumers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Consumer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "productivity.suite.local/api/v1/consumers/:id",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"consumers",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "e735fd08-6f13-49af-a5e9-21071bb60f3d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "001-Create List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"value": "8086733f-7cdd-45ef-9cc7-05fc132fd993",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"ToDO\",\n    \"ownerId\": \"8086733f-7cdd-45ef-9cc7-05fc132fd993\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "productivity.suite.local/api/v1/lists",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"lists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "002-Available Lists",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"value": "8086733f-7cdd-45ef-9cc7-05fc132fd993",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "productivity.suite.local/api/v1/lists",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"lists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "003-Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"value": "b167c3fe-c070-44b4-b49a-ccd27c77d241",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Buy coffe\",\n    \"note\": \"today\",\n    \"listId\": \"e7df12d8-4346-4033-a2ab-9e160147fe98\",\n    \"ownerId\": \"b167c3fe-c070-44b4-b49a-ccd27c77d241\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "productivity.suite.local/api/v1/tasks",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "004-Show Task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "productivity.suite.local/api/v1/tasks/:id",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "98ae0aea-24e4-4b89-8b4b-cac650762950"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "004-Show List Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "productivity.suite.local/api/v1/lists/:id/tasks?completed=1",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"lists",
+								":id",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "completed",
+									"value": "1"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "c8b25feb-3026-4cf3-b84c-07d57a734ffc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "005-Complete Task",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"type": "text",
+								"value": "b167c3fe-c070-44b4-b49a-ccd27c77d241"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"completed\": \"true\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "productivity.suite.local/api/v1/tasks/:id",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "91df61f4-c494-4ab8-a63d-128ae80fbd21"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "006-Move Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"type": "text",
+								"value": "b167c3fe-c070-44b4-b49a-ccd27c77d241"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"listId\": \"e7df12d8-4346-4033-a2ab-9e160147fe98\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "productivity.suite.local/api/v1/tasks/:id/list",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id",
+								"list"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "91df61f4-c494-4ab8-a63d-128ae80fbd21"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "006-Remove Task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"type": "text",
+								"value": "feb5cfcc-f539-43ee-b14c-541b0066f25c"
+							}
+						],
+						"url": {
+							"raw": "productivity.suite.local/api/v1/tasks/:id",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "96d0d313-3295-45e7-9b13-add42048eaab"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "007-Remove List",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Authorized-Consumer-ID",
+								"type": "text",
+								"value": "feb5cfcc-f539-43ee-b14c-541b0066f25c"
+							}
+						],
+						"url": {
+							"raw": "productivity.suite.local/api/v1/lists/:id",
+							"host": [
+								"productivity",
+								"suite",
+								"local"
+							],
+							"path": [
+								"api",
+								"v1",
+								"lists",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5298df70-e548-404b-be04-899fdaa8cc2c"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

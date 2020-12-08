@@ -70,6 +70,13 @@
         ],
         "post-autoload-dump": [
             "vendor/bin/captainhook install -f -s"
+        ],
+        "execute-functional": [
+            "bin/console doctrine:database:drop --if-exists --force --env=test --no-interaction",
+            "bin/console doctrine:database:create --env=test --no-interaction",
+            "bin/console doctrine:migrations:migrate --env=test --no-interaction",
+            "bin/console doctrine:fixtures:load --env=test --no-interaction",
+            "bin/phpunit --coverage-text --testsuite functional"
         ]
     },
     "conflict": {
@@ -87,6 +94,8 @@
     "require-dev": {
         "captainhook/captainhook": "^5.4",
         "captainhook/plugin-composer": "^5.2",
+        "dama/doctrine-test-bundle": "^6.4",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "mheap/phpunit-github-actions-printer": "^1.5",
         "mockery/mockery": "^1.4",
         "phpstan/phpstan": "^0.12.58",

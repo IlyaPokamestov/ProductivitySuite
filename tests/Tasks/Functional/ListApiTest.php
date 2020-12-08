@@ -8,12 +8,31 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ListApiTest extends WebTestCase
 {
+    /** @var \Symfony\Bundle\FrameworkBundle\KernelBrowser */
+    protected static $client = null;
+
+    private function getMyClient()
+    {
+        if ($this::$client) {
+            return $this::$client;
+        }
+
+        return $this::$client = self::createClient(
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_X-AUTHORIZED-CONSUMER-ID' => '8086733f-7cdd-45ef-9cc7-05fc132fd993'
+            ]
+        );
+    }
+
     public function testCreateList()
     {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
+        $client = $this->getMyClient();
 
         $list = [
             "name" => "Test",
+            "ownerId" => '8086733f-7cdd-45ef-9cc7-05fc132fd993'
         ];
 
         $client->request(
@@ -29,43 +48,43 @@ class ListApiTest extends WebTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $newConsumer = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('id', $newConsumer);
-        unset($newConsumer['id']);
-        $this->assertEquals($list, $newConsumer);
+        $this->assertEquals("Test", $newConsumer['name']);
     }
 
-    public function testListNotFound()
+    public function testAllLists()
     {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
-
+        $client = $this->getMyClient();
         $client->request(
             'GET',
-            '/api/v1/lists/625279e0-230b-4179-b339-bd091bf27a77'
+            '/api/v1/lists'
         );
-
-        $response = $client->getResponse();
-        $this->assertEquals(404, $response->getStatusCode());
-        $newConsumer = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('message', $newConsumer);
-        $this->assertEquals('List not found!', $newConsumer['message']);
-    }
-
-    public function testListExists()
-    {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
-
-        $client->request(
-            'GET',
-            '/api/v1/lists/aaa279e0-230b-4179-b339-bd091bf27a77'
-        );
-
-        $consumer = [
-            "id" => "aaa279e0-230b-4179-b339-bd091bf27a77",
-            "name" => "Test",
-        ];
 
         $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
-        $newConsumer = json_decode($response->getContent(), true);
-        $this->assertEquals($consumer, $newConsumer);
+        $lists = json_decode($response->getContent(), true);
+        $this->assertCount(2, $lists);
+    }
+
+    public function testListRemove()
+    {
+        $client = $this->getMyClient();
+
+        $client->request(
+            'DELETE',
+            '/api/v1/lists/fd0e060c-2d15-4432-a463-12e5511fe6cc'
+        );
+
+        $response = $client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $client->request(
+            'GET',
+            '/api/v1/lists'
+        );
+
+        $response = $client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+        $lists = json_decode($response->getContent(), true);
+        $this->assertCount(1, $lists);
     }
 }

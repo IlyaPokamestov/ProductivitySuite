@@ -53,4 +53,4 @@ jobs:
       - name: Run functional suite
         run: composer run-script execute-functional
         env:
-          DATABASE_URL="postgresql://psuite_app:psuite_app_pass@localhost:5432/productivity_suite_test?charset=UTF8&serverVersion=13"
+          DATABASE_URL: "postgresql://psuite_app:psuite_app_pass@localhost:5432/productivity_suite_test?charset=UTF8&serverVersion=13"

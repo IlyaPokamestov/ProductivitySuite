@@ -7,12 +7,14 @@ namespace IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\RegisterConsumer;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindById;
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\MessageBus\HandleTrait;
+use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Routing\Annotation\Route;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\Consumer as ReadConsumer;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\Error;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class ConsumerController
@@ -74,10 +76,13 @@ class ConsumerController
      * @OA\Tag(name="IDMS")
      *
      * @param RegisterConsumer $registerConsumer
+     * @param ConstraintViolationListInterface $errors
      * @return ReadConsumer
      */
-    public function register(RegisterConsumer $registerConsumer)
+    public function register(RegisterConsumer $registerConsumer, ConstraintViolationListInterface $errors)
     {
+        ThrowError::fromConstraintViolation($errors);
+
         $id = $this->command($registerConsumer);
 
         return $this->query(new FindById($id));

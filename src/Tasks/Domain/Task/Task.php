@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task
  *
  * @ORM\Entity()
- * @ORM\Table(name="task")
+ * @ORM\Table(name="task", indexes={@ORM\Index(name="search_idx", columns={"list_id", "completed"})})
  */
 class Task extends AggregateRoot implements Removable, Ownerable
 {

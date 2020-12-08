@@ -22,7 +22,7 @@ final class Status
     private const ACTIVE = 'ACTIVE';
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=30)
      *
      * @var string
      */

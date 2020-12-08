@@ -8,13 +8,33 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskApiTest extends WebTestCase
 {
-    public function testCreateList()
-    {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
+    /** @var \Symfony\Bundle\FrameworkBundle\KernelBrowser */
+    protected static $client = null;
 
-        $list = [
-            "title" => "Buy coffe",
-            "listId" => "e2bdfc56-426b-40d0-85fe-1df87f9feaee"
+    private function getMyClient()
+    {
+        if ($this::$client) {
+            return $this::$client;
+        }
+
+        return $this::$client = self::createClient(
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_X-AUTHORIZED-CONSUMER-ID' => '8086733f-7cdd-45ef-9cc7-05fc132fd993'
+            ]
+        );
+    }
+
+    public function testCreateTask()
+    {
+        $client = $this->getMyClient();
+
+        $task = [
+            "title" => "Buy coffee",
+            "note" => "",
+            "listId" => "fd0e060c-2d15-4432-a463-12e5511fe6cc",
+            "ownerId" => '8086733f-7cdd-45ef-9cc7-05fc132fd993',
         ];
 
         $client->request(
@@ -23,7 +43,7 @@ class TaskApiTest extends WebTestCase
             [],
             [],
             [],
-            json_encode($list)
+            json_encode($task)
         );
 
         $response = $client->getResponse();
@@ -31,42 +51,50 @@ class TaskApiTest extends WebTestCase
         $newConsumer = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('id', $newConsumer);
         unset($newConsumer['id']);
-        $this->assertEquals($list, $newConsumer);
+        $this->assertEquals($task['title'], $newConsumer['title']);
     }
 
-    public function testListNotFound()
+    public function testComplete()
     {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
+        $client = $this->getMyClient();
+
+        $completed = [
+            "completed" => true,
+        ];
 
         $client->request(
-            'GET',
-            '/api/v1/tasks/625279e0-230b-4179-b339-bd091bf27a77'
+            'PATCH',
+            '/api/v1/tasks/0e4fea85-c28b-45dc-8df2-ca9d2c4110b3',
+            [],
+            [],
+            [],
+            json_encode($completed)
         );
 
-        $response = $client->getResponse();
-        $this->assertEquals(404, $response->getStatusCode());
-        $newConsumer = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('message', $newConsumer);
-        $this->assertEquals('Task not found!', $newConsumer['message']);
-    }
-
-    public function testListExists()
-    {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
-
-        $client->request(
-            'GET',
-            '/api/v1/tasks/aaa279e0-230b-4179-b339-bd091bf27a77'
-        );
-
-        $consumer = [
-            "id" => "aaa279e0-230b-4179-b339-bd091bf27a77",
-            "title" => "Test",
+        $task = [
+            "id" => "0e4fea85-c28b-45dc-8df2-ca9d2c4110b3",
+            "title" => "Task#0",
+            "listId" => "fd0e060c-2d15-4432-a463-12e5511fe6cc"
         ];
 
         $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $newConsumer = json_decode($response->getContent(), true);
-        $this->assertEquals($consumer, $newConsumer);
+        $this->assertEquals($task, $newConsumer);
+    }
+
+    public function testDelete()
+    {
+        $client = $this->getMyClient();
+
+        $client->request(
+            'DELETE',
+            '/api/v1/tasks/0e4fea85-c28b-45dc-8df2-ca9d2c4110b3'
+        );
+
+        $response = $client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+        $newConsumer = json_decode($response->getContent(), true);
+        $this->assertEquals([], $newConsumer);
     }
 }

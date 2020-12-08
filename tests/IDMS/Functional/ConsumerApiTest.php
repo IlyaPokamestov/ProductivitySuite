@@ -8,6 +8,24 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ConsumerApiTest extends WebTestCase
 {
+    /** @var \Symfony\Bundle\FrameworkBundle\KernelBrowser */
+    protected static $client = null;
+
+    private function getMyClient()
+    {
+        if ($this::$client) {
+            return $this::$client;
+        }
+
+        return $this::$client = self::createClient(
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_X-AUTHORIZED-CONSUMER-ID' => '8086733f-7cdd-45ef-9cc7-05fc132fd993'
+            ]
+        );
+    }
+
     public function testRegisterConsumer()
     {
         $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
@@ -54,18 +72,18 @@ class ConsumerApiTest extends WebTestCase
 
     public function testConsumerExists()
     {
-        $client = self::createClient([], ['CONTENT_TYPE' => 'application/json']);
+        $client = $this->getMyClient();
 
         $client->request(
             'GET',
-            '/api/v1/consumers/aaa279e0-230b-4179-b339-bd091bf27a77'
+            '/api/v1/consumers/8086733f-7cdd-45ef-9cc7-05fc132fd993'
         );
 
         $consumer = [
-            "id" => "aaa279e0-230b-4179-b339-bd091bf27a77",
-            "username" => "Test",
-            "firstName" => "Test",
-            "lastName" => "Test",
+            "id" => "8086733f-7cdd-45ef-9cc7-05fc132fd993",
+            "username" => "IlyaPokamestov",
+            "firstName" => "Ilya",
+            "lastName" => "Pokamestov",
             "email" => "test@test.com",
         ];
 

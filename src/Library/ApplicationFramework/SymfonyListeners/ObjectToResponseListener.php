@@ -12,10 +12,10 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Class ResponseListener
+ * Class ObjectToResponseListener
  * @package IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\SymfonyListeners
  */
-class ResponseListener implements EventSubscriberInterface
+class ObjectToResponseListener implements EventSubscriberInterface
 {
     protected const DEFAULT_HEADERS = ['Content-Type' => 'application/json'];
     protected const DEFAULT_STATUS_ERROR = Response::HTTP_BAD_REQUEST;

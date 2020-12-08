@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\IDMS\Application\Query;
 
 /**
- * Class ConsumerHandler
+ * Class FindByIdHandler
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Application\Query
  */
-class ConsumerHandler implements QueryHandlerInterface
+class FindByIdHandler implements QueryHandlerInterface
 {
     /** @var ConsumerRepository */
     public ConsumerRepository $consumerRepository;

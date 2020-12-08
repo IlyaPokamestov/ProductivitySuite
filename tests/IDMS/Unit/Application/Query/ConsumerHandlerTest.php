@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Application\Query;
 
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\Consumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerHandler;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindByIdHandler;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindById;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +20,7 @@ class ConsumerHandlerTest extends TestCase
             ->withAnyArgs()
             ->andReturn($consumerDto);
 
-        $handler = new ConsumerHandler($repository);
+        $handler = new FindByIdHandler($repository);
         $this->assertEquals($consumerDto, $handler(new FindById('123')));
     }
 }

@@ -18,10 +18,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 
 /**
- * Class ExceptionListener
+ * Class HandleDomainExceptionsListener
  * @package IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\SymfonyListeners
  */
-class ExceptionListener implements EventSubscriberInterface
+class HandleDomainExceptionsListener implements EventSubscriberInterface
 {
     /** @var SerializerInterface */
     private SerializerInterface $serializer;

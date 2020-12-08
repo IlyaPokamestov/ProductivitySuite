@@ -59,6 +59,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: IlyaPokamestov/ProductivitySuite:latest
+          tags: ilya-pokamestov/productivity-suite:latest
           secrets: |
             GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}

@@ -39,7 +39,7 @@ class TaskList extends AggregateRoot implements Removable, Ownerable
     private ListId $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=150)
      *
      * @var string
      */

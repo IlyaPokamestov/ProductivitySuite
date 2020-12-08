@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 final class Email
 {
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=150)
      *
      * @var string
      */

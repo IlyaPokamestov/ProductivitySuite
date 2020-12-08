@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
 
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\Criteria;
+use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowError;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\TaskList\RemoveList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\FindTasksBy;
@@ -22,6 +23,7 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\Error;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\TaskList as ReadList;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class ListController
@@ -151,10 +153,13 @@ class ListController
      * @OA\Tag(name="Tasks - List")
      *
      * @param CreateList $createList
+     * @param ConstraintViolationListInterface $errors
      * @return TaskList
      */
-    public function create(CreateList $createList)
+    public function create(CreateList $createList, ConstraintViolationListInterface $errors)
     {
+        ThrowError::fromConstraintViolation($errors);
+
         $id = $this->command($createList);
 
         return $this->query(new FindById($id));

@@ -19,21 +19,21 @@ use Doctrine\ORM\Mapping as ORM;
 final class Name
 {
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=50)
      *
      * @var string
      */
     private string $username;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=150)
      *
      * @var string
      */
     private string $firstName;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=150)
      *
      * @var string
      */

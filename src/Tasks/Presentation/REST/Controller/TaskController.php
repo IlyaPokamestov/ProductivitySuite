@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
 
+use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowError;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTask;
@@ -20,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\Error;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class TaskController
@@ -54,10 +56,13 @@ class TaskController
      * @OA\Tag(name="Tasks - Task")
      *
      * @param CreateTask $createTask
+     * @param ConstraintViolationListInterface $errors
      * @return Task
      */
-    public function create(CreateTask $createTask)
+    public function create(CreateTask $createTask, ConstraintViolationListInterface $errors)
     {
+        ThrowError::fromConstraintViolation($errors);
+
         $id = $this->command($createTask);
 
         return $this->query(new FindById($id));
@@ -105,10 +110,13 @@ class TaskController
      *
      * @param string $id
      * @param CompleteTaskRequest $patchRequest
+     * @param ConstraintViolationListInterface $errors
      * @return Task
      */
-    public function complete(string $id, CompleteTaskRequest $patchRequest)
+    public function complete(string $id, CompleteTaskRequest $patchRequest, ConstraintViolationListInterface $errors)
     {
+        ThrowError::fromConstraintViolation($errors);
+
         if ($patchRequest->isCompleted()) {
             $this->command(new CompleteTask($id));
         }
@@ -201,10 +209,13 @@ class TaskController
      *
      * @param string $id
      * @param MoveTaskRequest $moveTask
+     * @param ConstraintViolationListInterface $errors
      * @return MoveTaskRequest
      */
-    public function move(string $id, MoveTaskRequest $moveTask)
+    public function move(string $id, MoveTaskRequest $moveTask, ConstraintViolationListInterface $errors)
     {
+        ThrowError::fromConstraintViolation($errors);
+
         $this->command(new MoveTask($id, $moveTask->getListId()));
 
         return $moveTask;

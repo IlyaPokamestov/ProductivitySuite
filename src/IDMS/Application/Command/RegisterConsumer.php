@@ -15,10 +15,12 @@ class RegisterConsumer
 {
     /**
      * @var string
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Username can not be empty.")
      * @Assert\Length(
      *     min="1",
-     *     max="50"
+     *     max="50",
+     *     minMessage="Username should be more than 1 character lenght",
+     *     maxMessage="Username can not be more than 50 characters lenght"
      * )
      * @Assert\Regex(
      *     pattern="/^[A-Za-z0-9]*$/",
@@ -29,10 +31,12 @@ class RegisterConsumer
 
     /**
      * @var string
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="First name can not be empty.")
      * @Assert\Length(
      *     min="1",
-     *     max="150"
+     *     max="150",
+     *     minMessage="First name should be more than 1 character lenght",
+     *     maxMessage="First name can not be more than 150 characters lenght"
      * )
      * @Serializer\SerializedName("firstName")
      */
@@ -40,10 +44,12 @@ class RegisterConsumer
 
     /**
      * @var string
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Last name can not be empty.")
      * @Assert\Length(
      *     min="1",
-     *     max="150"
+     *     max="150",
+     *     minMessage="Last name should be more than 1 character lenght",
+     *     maxMessage="Last name can not be more than 150 characters lenght"
      * )
      * @Serializer\SerializedName("lastName")
      */
@@ -52,10 +58,12 @@ class RegisterConsumer
     /**
      * @var string
      * @Assert\Email()
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Email can not be empty.")
      * @Assert\Length(
      *     min="1",
-     *     max="150"
+     *     max="150",
+     *     minMessage="Email should be more than 1 character lenght",
+     *     maxMessage="Email can not be more than 150 characters lenght"
      * )
      */
     private string $email;

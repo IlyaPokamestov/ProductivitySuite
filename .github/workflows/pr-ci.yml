@@ -12,6 +12,8 @@ jobs:
       # Label used to access the service container
       database:
         image: postgres:13.1
+        ports:
+          - 5432:5432
         env:
           POSTGRES_DB: productivity_suite_test
           POSTGRES_USER: psuite_app
@@ -50,3 +52,5 @@ jobs:
         run: bin/phpunit --coverage-text --printer mheap\\GithubActionsReporter\\Printer --testsuite unit
       - name: Run functional suite
         run: composer run-script execute-functional
+        env:
+          DATABASE_URL="postgresql://psuite_app:psuite_app_pass@localhost:5432/productivity_suite_test?charset=UTF8&serverVersion=13"

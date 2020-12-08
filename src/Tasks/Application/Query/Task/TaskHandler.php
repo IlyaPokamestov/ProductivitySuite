@@ -30,6 +30,6 @@ class TaskHandler implements QueryHandlerInterface
      */
     public function __invoke(FindById $findById): Task
     {
-        return $this->taskRepository->findTaskById($findById->getId());
+        return $this->taskRepository->findById($findById->getId());
     }
 }

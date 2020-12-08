@@ -24,5 +24,5 @@ interface ConsumerRepository
      * @return Consumer
      * @EntityNotFoundException
      */
-    public function findConsumerById(ConsumerId $id): Consumer;
+    public function findById(ConsumerId $id): Consumer;
 }

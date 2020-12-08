@@ -8,16 +8,14 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository as WriteRepository;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\ListRepository as ReadRepository;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\TaskList as ReadOnlyList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\TaskList;
 
 /**
  * Class ListRepository
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine
  */
-class ListRepository extends ServiceEntityRepository implements WriteRepository, ReadRepository
+class ListRepository extends ServiceEntityRepository implements WriteRepository
 {
     /** {@inheritDoc} */
     public function __construct(ManagerRegistry $registry)
@@ -37,18 +35,7 @@ class ListRepository extends ServiceEntityRepository implements WriteRepository,
     }
 
     /** {@inheritDoc} */
-    public function findById(string $id): ReadOnlyList
-    {
-        $list = $this->findListById(new ListId($id));
-
-        return new ReadOnlyList(
-            (string) $list->getId(),
-            $list->getName()
-        );
-    }
-
-    /** {@inheritDoc} */
-    public function findListById(ListId $id): TaskList
+    public function findById(ListId $id): TaskList
     {
         /** @var TaskList|null $list */
         $list = $this->find((string) $id);

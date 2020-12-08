@@ -24,5 +24,5 @@ interface ListRepository
      * @return TaskList
      * @throws EntityNotFoundException
      */
-    public function findListById(ListId $id): TaskList;
+    public function findById(ListId $id): TaskList;
 }

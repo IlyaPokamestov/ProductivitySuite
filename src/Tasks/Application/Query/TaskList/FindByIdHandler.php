@@ -6,14 +6,12 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList;
 
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\QueryHandlerInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository as DomainListRepository;
 
 /**
- * Class ListHandler
+ * Class FindByIdHandler
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList
  */
-class ListHandler implements QueryHandlerInterface
+class FindByIdHandler implements QueryHandlerInterface
 {
     /** @var ListRepository */
     public ListRepository $listRepository;
@@ -37,13 +35,8 @@ class ListHandler implements QueryHandlerInterface
      */
     public function __invoke(FindById $findById): TaskList
     {
-        //TODO: Find a better way how to verify ownership on view model.
-        if ($this->listRepository instanceof DomainListRepository) {
-            $listAggregate = $this->listRepository->findListById(new ListId($findById->getId()));
-
-            $this->ownershipPolicy->verify($listAggregate);
-        }
-
+        $listAggregate = $this->listRepository->findAggregateById($findById->getId());
+        $this->ownershipPolicy->verify($listAggregate);
 
         return $this->listRepository->findById($findById->getId());
     }

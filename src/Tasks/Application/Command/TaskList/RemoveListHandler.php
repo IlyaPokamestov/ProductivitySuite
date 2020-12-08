@@ -40,7 +40,7 @@ class RemoveListHandler implements CommandHandlerInterface
      */
     public function __invoke(RemoveList $removeList)
     {
-        $list = $this->listRepository->findListById(new ListId($removeList->getId()));
+        $list = $this->listRepository->findById(new ListId($removeList->getId()));
         $this->ownerRegisteredPolicy->verify($list->getOwnerId());
 
         if (TaskList::DEFAULT_LIST_NAME === $list->getName()) {

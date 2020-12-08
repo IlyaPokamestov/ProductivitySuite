@@ -22,6 +22,7 @@ As a result, we should get a RESTful Web API service.
 ## Table of contents
 
 1) [Analysis of domain](./docs/001-analysis-of-tasks-applications.md)
+2) [API documentation](./docs/002-api-documentation.md)
 
 ## Done:
 - [x] Setup Symfony 5 project.
@@ -36,9 +37,10 @@ As a result, we should get a RESTful Web API service.
 - [x] Establish synchronous communication between bounded contexts.
 - [x] Domain event listeners.
 - [x] Apply Saga pattern.
+- [x] Implement remaining REST API endpoints.
+- [x] Generated OpenAPI v3 specification/documentation.
 
 ## TODO:
-- [ ] Implement remaining REST API endpoints.
 - [ ] Fill in documentation gaps.
 - [ ] Container publishing.
 - [ ] CI: Data fixtures for functional tests.
@@ -46,5 +48,6 @@ As a result, we should get a RESTful Web API service.
 - [ ] Find a solution for policy checks on the query layer.
 - [ ] I do not see an easy way how to make symfony messenger listed events from other bounded
 contexts without explicit use of the domain event classes in the handlers.
+- [ ] Make Criteria generic.
 - [ ] Bring observability
 - [ ] Health checks

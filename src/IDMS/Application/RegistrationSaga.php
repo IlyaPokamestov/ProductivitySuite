@@ -70,7 +70,7 @@ class RegistrationSaga implements MessageSubscriberInterface
             return;
         }
 
-        $consumer = $this->consumerRepository->findConsumerById(new ConsumerId((string) $listCreated->getOwnerId()));
+        $consumer = $this->consumerRepository->findById(new ConsumerId((string) $listCreated->getOwnerId()));
         if ($consumer->getStatus()->equal(Status::registrationInProgress())) {
             $consumer->completeRegistration();
 

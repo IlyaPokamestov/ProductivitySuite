@@ -8,9 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository as WriteRepository;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\TaskRepository as ReadRepository;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\Task as ReadOnlyTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
 
@@ -18,7 +16,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
  * Class ListRepository
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine
  */
-class TaskRepository extends ServiceEntityRepository implements WriteRepository, ReadRepository
+class TaskRepository extends ServiceEntityRepository implements WriteRepository
 {
     /** {@inheritDoc} */
     public function __construct(ManagerRegistry $registry)
@@ -47,18 +45,6 @@ class TaskRepository extends ServiceEntityRepository implements WriteRepository,
         }
 
         return $task;
-    }
-
-    /** {@inheritDoc} */
-    public function findTaskById(string $id): ReadOnlyTask
-    {
-        $task = $this->findById(new TaskId($id));
-
-        return new ReadOnlyTask(
-            (string) $task->getId(),
-            $task->getDescription()->getTitle(),
-            (string) $task->getListId(),
-        );
     }
 
     /** {@inheritDoc} */

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Query;
 
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\FindById;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\ListHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\FindByHandler;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\TaskList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\ListRepository;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ class ListHandlerTest extends TestCase
             ->withAnyArgs()
             ->andReturn($listDto);
 
-        $handler = new ListHandler($repository);
+        $handler = new FindByHandler($repository);
         $this->assertEquals($listDto, $handler->findById(new FindById('123')));
     }
 }

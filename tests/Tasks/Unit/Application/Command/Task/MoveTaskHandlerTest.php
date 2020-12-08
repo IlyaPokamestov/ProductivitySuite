@@ -46,7 +46,7 @@ class MoveTaskHandlerTest extends TestCase
 
         $list = \Mockery::mock(TaskList::class);
         $listRepository = \Mockery::mock(ListRepository::class);
-        $listRepository->shouldReceive('findListById')
+        $listRepository->shouldReceive('findById')
             ->with(\Mockery::type(ListId::class))
             ->andReturn($list);
 

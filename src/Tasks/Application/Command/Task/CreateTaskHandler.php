@@ -53,7 +53,7 @@ class CreateTaskHandler implements CommandHandlerInterface
         $this->ownerRegisteredPolicy->verify($ownerId);
 
         $listId = new ListId($createTask->getListId());
-        $this->listRepository->findListById($listId);
+        $this->listRepository->findById($listId);
 
         $task = Task::create(
             TaskId::generate(),

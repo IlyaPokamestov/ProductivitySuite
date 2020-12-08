@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
+namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\Request;
 
 /**
- * Class TaskPatchRequest
- * @package IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller
+ * Class CompleteTaskRequest
+ * @package IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\Request
  */
 class CompleteTaskRequest
 {

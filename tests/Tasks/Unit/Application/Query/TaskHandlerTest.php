@@ -16,7 +16,7 @@ class TaskHandlerTest extends TestCase
     {
         $taskDto = \Mockery::mock(Task::class);
         $repository = \Mockery::mock(TaskRepository::class);
-        $repository->shouldReceive('findTaskById')
+        $repository->shouldReceive('findById')
             ->withAnyArgs()
             ->andReturn($taskDto);
 

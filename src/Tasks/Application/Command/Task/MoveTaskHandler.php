@@ -52,7 +52,7 @@ class MoveTaskHandler implements CommandHandlerInterface
         $task = $this->taskRepository->findById(new TaskId($moveTask->getId()));
         $this->ownershipPolicy->verify($task);
 
-        $targetList = $this->listRepository->findListById(new ListId($moveTask->getListId()));
+        $targetList = $this->listRepository->findById(new ListId($moveTask->getListId()));
         $this->ownershipPolicy->verify($targetList);
 
         $task->move(new ListId($moveTask->getListId()));

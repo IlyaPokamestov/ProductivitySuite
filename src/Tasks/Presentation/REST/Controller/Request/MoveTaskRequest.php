@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
+namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\Request;
 
 use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Class MoveTaskRequest
- * @package IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller
+ * @package IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\Request
  */
 class MoveTaskRequest
 {

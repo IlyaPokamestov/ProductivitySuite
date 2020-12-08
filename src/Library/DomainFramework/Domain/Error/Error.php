@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Class Error
  * @package IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error
  */
 class Error
 {
-    /** @var string */
+    /**
+     * @Serializer\Type("string")
+     *
+     * @var string
+     */
     private string $message;
 
     /**

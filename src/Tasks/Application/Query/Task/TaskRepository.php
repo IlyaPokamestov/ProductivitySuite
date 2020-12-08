@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task;
 
+use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\Criteria;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task as AggregateTask;
+use Iterator;
 
 /**
  * Interface TaskRepository
@@ -19,5 +22,23 @@ interface TaskRepository
      * @return Task
      * @throws EntityNotFoundException
      */
-    public function findTaskById(string $id): Task;
+    public function findById(string $id): Task;
+
+    /**
+     * Find by criteria.
+     *
+     * @param mixed $criteria
+     * @return Iterator
+     */
+    public function findBy($criteria): Iterator;
+
+    /**
+     * Find aggregate by ID.
+     *
+     * TODO: Still not a good one.
+     *
+     * @param string $id
+     * @return AggregateTask
+     */
+    public function findAggregateById(string $id): AggregateTask;
 }

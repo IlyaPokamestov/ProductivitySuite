@@ -45,4 +45,14 @@ class RequestBasedOwnershipPolicy implements OwnershipPolicy
             throw new OwnershipMismatchException('Access denied!');
         }
     }
+
+    /**
+     * TODO: Move to separate service
+     *
+     * @return string
+     */
+    public function getRequestOwnerId(): string
+    {
+        return $this->stack->getMasterRequest()->headers->get(self::OWNER_ID_HEADER);
+    }
 }

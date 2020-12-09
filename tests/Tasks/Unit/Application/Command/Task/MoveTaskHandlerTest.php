@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\Task;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTaskHandler;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\TaskList;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\MoveTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\CommandHandler\MoveTaskCommandHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Task;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\TaskId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\TaskRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\ListRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -50,12 +50,12 @@ class MoveTaskHandlerTest extends TestCase
             ->with(\Mockery::type(ListId::class))
             ->andReturn($list);
 
-        $command = new MoveTask(
+        $command = new \IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\MoveTask(
             Uuid::uuid4()->toString(),
             Uuid::uuid4()->toString(),
         );
 
-        $handler = new MoveTaskHandler($repository, $policy, $listRepository);
+        $handler = new \IlyaPokamestov\ProductivitySuite\Tasks\Application\CommandHandler\MoveTaskCommandHandler($repository, $policy, $listRepository);
         $handler($command);
     }
 }

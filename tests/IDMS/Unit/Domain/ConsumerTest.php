@@ -2,11 +2,11 @@
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Domain;
 
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Consumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerId;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\RegistrationInitiated;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Email;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Name;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Consumer;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\ConsumerId;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Event\RegistrationInitiated;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Email;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Name;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -16,12 +16,12 @@ class ConsumerTest extends TestCase
     {
         $id = Uuid::uuid4()->toString();
         $consumer = Consumer::register(
-            new ConsumerId($id),
-            new Name('IlyaPokamestov', 'Ilya', 'Pokamestov'),
+            new \IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\ConsumerId($id),
+            new \IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Name('IlyaPokamestov', 'Ilya', 'Pokamestov'),
             new Email('test@test.com')
         );
 
-        $this->assertInstanceOf(Consumer::class, $consumer);
+        $this->assertInstanceOf(\IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Consumer::class, $consumer);
         $events = $consumer->events();
         $this->assertCount(1, $events);
         /** @var RegistrationInitiated $event */

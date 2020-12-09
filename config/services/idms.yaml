@@ -1,0 +1,40 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    _instanceof:
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
+
+    # Application Layer Services
+    IlyaPokamestov\ProductivitySuite\IDMS\Application\:
+        resource: '../../src/IDMS/Application/*'
+        exclude: '../../src/IDMS/Application/{Command,Query,ReadModel}'
+
+    # Infrastructure Layer Services
+    IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Persistence\Doctrine\:
+        resource: '../../src/IDMS/Infrastructure/Persistence/Doctrine/*'
+        exclude: '../../src/IDMS/Infrastructure/Persistence/Doctrine/{Type}'
+
+    # Presentation Layer Services
+    IlyaPokamestov\ProductivitySuite\IDMS\Presentation\:
+        resource: '../../src/IDMS/Presentation/*'
+        exclude:
+            - '../../src/IDMS/Presentation/REST/Controller/'
+
+    # - Controllers
+    IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller\:
+        resource: '../../src/IDMS/Presentation/REST/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    # Aliases
+    IlyaPokamestov\ProductivitySuite\IDMS\Application\ReadModel\ConsumerReadRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Persistence\Doctrine\Repository\ConsumerReadRepository'
+    IlyaPokamestov\ProductivitySuite\IDMS\Domain\Repository\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Persistence\Doctrine\Repository\ConsumerRepository'

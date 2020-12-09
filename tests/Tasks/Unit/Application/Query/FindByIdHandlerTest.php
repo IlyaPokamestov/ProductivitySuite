@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Query;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\FindById;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\FindByIdHandler;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\ListRepository;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\TaskList;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListById;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\QueryHandler\FindByListByIdQueryHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\ListReadRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskListReadModel;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Task;
 use PHPUnit\Framework\TestCase;
 
 class FindByIdHandlerTest extends TestCase
 {
     public function testFindById()
     {
-        $listDto = \Mockery::mock(TaskList::class);
-        $aggregate = \Mockery::mock(\IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\TaskList::class);
-        $repository = \Mockery::mock(ListRepository::class);
+        $listDto = \Mockery::mock(TaskListReadModel::class);
+        $aggregate = \Mockery::mock(\IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList::class);
+        $repository = \Mockery::mock(ListReadRepository::class);
         $repository->shouldReceive('findAggregateById')
             ->withAnyArgs()
             ->andReturn($aggregate);
@@ -29,10 +29,10 @@ class FindByIdHandlerTest extends TestCase
 
         $policy = \Mockery::mock(OwnershipPolicy::class);
         $policy->shouldReceive('verify')
-            ->with(\Mockery::type(\IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\TaskList::class))
+            ->with(\Mockery::type(\IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList::class))
             ->andReturnNull();
 
-        $handler = new FindByIdHandler($repository, $policy);
-        $this->assertEquals($listDto, $handler(new FindById('123')));
+        $handler = new FindByListByIdQueryHandler($repository, $policy);
+        $this->assertEquals($listDto, $handler(new FindListById('123')));
     }
 }

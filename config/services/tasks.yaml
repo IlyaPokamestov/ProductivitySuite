@@ -1,0 +1,47 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    _instanceof:
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
+
+    # Application Layer Services
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\:
+        resource: '../../src/Tasks/Application/'
+        exclude: '../../src/Tasks/Application/{Command,Query,ReadModel}'
+
+    # Infrastructure Layer Services
+    IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\:
+        resource: '../../src/Tasks/Infrastructure/'
+        exclude:
+            - '../../src/Tasks/Infrastructure/Persistence/Doctrine/Type/'
+
+    # Presentation Layer Services
+    IlyaPokamestov\ProductivitySuite\Tasks\Presentation\:
+        resource: '../../src/Tasks/Presentation/'
+        exclude:
+            - '../../src/Tasks/Presentation/REST/Request/'
+
+    # - Controllers
+    IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\:
+        resource: '../../src/Tasks/Presentation/REST/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    # Aliases
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository\ListRepository'
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository\TaskRepository'
+
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\ListReadRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository\ListReadRepository'
+    IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskReadRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository\TaskReadRepository'
+
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Service\RequestBasedOwnershipPolicy'
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnerRegisteredPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\IDMS\CheckConsumerRegistration'

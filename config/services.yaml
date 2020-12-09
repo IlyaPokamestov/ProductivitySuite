@@ -1,31 +1,12 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters:
+imports:
+    - { resource: services/idms.yaml }
+    - { resource: services/tasks.yaml }
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    _instanceof:
-        IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CommandHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: tasks.command.bus }
-        IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\QueryHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: tasks.query.bus }
-        IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\CommandHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: idms.command.bus }
-        IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\QueryHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: idms.query.bus }
-        IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\MessageBus\EventHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: event.bus }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -35,75 +16,18 @@ services:
     IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\:
         resource: '../src/Library/ApplicationFramework/'
 
-    IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\:
-        resource: '../src/IDMS/Infrastructure/'
-
-    IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\:
-        resource: '../src/Tasks/Infrastructure/'
-
-#TODO: Split services per domain.
-
-    # Write Repositories:
-    IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\ConsumerRepository'
-    IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\ListRepository'
-    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\TaskRepository'
-
-    # Read Repositories:
-    IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository: '@IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\Read\ConsumerRepository'
-    IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\TaskList\ListRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Read\ListRepository'
-    IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\TaskRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Read\TaskRepository'
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-
     IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\DoctrineDomainEventsCollector:
         tags:
             - { name: doctrine.event_subscriber }
 
-    # Buses configuration
-    message_handlers:
-        namespace: IlyaPokamestov\ProductivitySuite\
-        resource: '../src/**/*Handler.php'
-
-    IlyaPokamestov\ProductivitySuite\IDMS\Application\RegistrationSaga: ~
-
-    # IDMS Controllers
-    IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller\:
-        resource: '../src/IDMS/Presentation/REST/Controller/'
+    # Busses
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CommandBusSymfonyMessengerAdapter:
         arguments:
-            - '@idms.query.bus'
-            - '@idms.command.bus'
-        tags: [ 'controller.service_arguments' ]
+            - '@command.bus'
 
-    # IDMS Internal Services
-    IlyaPokamestov\ProductivitySuite\IDMS\Presentation\Internal\:
-        resource: '../src/IDMS/Presentation/Internal/'
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\QueryBusSymfonyMessengerAdapter:
         arguments:
-            - '@idms.query.bus'
-            - '@idms.command.bus'
+            - '@query.bus'
 
-    # Tasks Controllers
-    IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\:
-        resource: '../src/Tasks/Presentation/REST/Controller/'
-        arguments:
-            - '@tasks.query.bus'
-            - '@tasks.command.bus'
-        tags: [ 'controller.service_arguments' ]
-
-    # Tasks Event Handlers
-    IlyaPokamestov\ProductivitySuite\Tasks\Application\EventListener\OnConsumerRegistrationEventHandler:
-        arguments:
-            - '@tasks.command.bus'
-
-    IlyaPokamestov\ProductivitySuite\Tasks\Application\EventListener\OnListRemovedEventHandler:
-        arguments:
-            - '@tasks.command.bus'
-
-    # Tasks REST Presentation Services
-    IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\:
-        resource: '../src/Tasks/Presentation/REST/*'
-        exclude: '../src/Tasks/Presentation/REST/{Controller}'
-
-    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\RequestBasedOwnershipPolicy'
-    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnerRegisteredPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\IDMS\CheckConsumerStatus'
-
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandBusInterface: '@IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CommandBusSymfonyMessengerAdapter'
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryBusInterface: '@IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\QueryBusSymfonyMessengerAdapter'

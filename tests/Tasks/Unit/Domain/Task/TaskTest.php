@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Domain\Task;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCreated;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskMoved;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskRemoved;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Events\TaskCompleted;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Owner\OwnerId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Description;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Event\TaskCreated;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Event\TaskMoved;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Event\TaskRemoved;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Event\TaskCompleted;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Task;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\TaskId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 

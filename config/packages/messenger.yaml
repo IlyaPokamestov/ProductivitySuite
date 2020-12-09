@@ -4,14 +4,7 @@ framework:
         buses:
             event.bus:
                 default_middleware: allow_no_handlers
-            # Better to split command / query busses to prevent uncontrolled crossing bounded context boundaries.
-            # IDMS busses
-            idms.command.bus:
+            command.bus:
                 middleware:
                     - doctrine_transaction
-            idms.query.bus:
-            # Tasks busses
-            tasks.command.bus:
-                middleware:
-                    - doctrine_transaction
-            tasks.query.bus:
+            query.bus:

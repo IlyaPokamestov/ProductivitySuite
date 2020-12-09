@@ -35,13 +35,12 @@ class CreateListHandlerTest extends TestCase
             ->with(\Mockery::type(OwnerId::class))
             ->andReturnNull();
 
-        $command = new \IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateList(
+        $command = new CreateList(
             'Default',
             Uuid::uuid4()->toString()
         );
 
-        $id = ListId::next();
         $handler = new CreateListCommandHandler($repository, $policy);
-        $this->assertEquals($id, $handler($command));
+        $handler($command);
     }
 }

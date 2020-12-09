@@ -16,6 +16,13 @@ services:
     IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\:
         resource: '../src/Library/ApplicationFramework/'
 
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\:
+        resource: '../src/Library/DomainFramework/'
+        exclude:
+            - '../../src/Library/DomainFramework/Application/'
+            - '../../src/Library/DomainFramework/Domain/'
+            - '../../src/Library/DomainFramework/Infrastructure/Type/'
+
     IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\DoctrineDomainEventsCollector:
         tags:
             - { name: doctrine.event_subscriber }

@@ -13,6 +13,9 @@ services:
         IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\EventHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
+        IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareInterface:
+            calls:
+                - setAuthorizationContext: ['@IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\RequestAuthorizationContext']
 
     # Application Layer Services
     IlyaPokamestov\ProductivitySuite\Tasks\Application\:
@@ -43,5 +46,5 @@ services:
     IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\ListReadRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository\ListReadRepository'
     IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskReadRepository: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository\TaskReadRepository'
 
-    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Service\RequestBasedOwnershipPolicy'
+    IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Service\AuthorizationBasedOwnershipPolicy'
     IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnerRegisteredPolicy: '@IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\IDMS\CheckConsumerRegistration'

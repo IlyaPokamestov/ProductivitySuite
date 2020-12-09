@@ -23,7 +23,7 @@ class CreateTaskHandlerTest extends TestCase
 
     public function testTaskCreation()
     {
-        $repository = \Mockery::mock(\IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\TaskRepository::class);
+        $repository = \Mockery::mock(TaskRepository::class);
         $repository->shouldReceive('save')
             ->with(\Mockery::type(Task::class))
             ->andReturnNull();
@@ -39,15 +39,14 @@ class CreateTaskHandlerTest extends TestCase
             ->with(\Mockery::type(ListId::class))
             ->andReturn($list);
 
-        $command = new \IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateTask(
+        $command = new CreateTask(
             'Do that!',
             'now!',
             Uuid::uuid4()->toString(),
             Uuid::uuid4()->toString(),
         );
 
-        $id = ListId::next();
         $handler = new CreateTaskCommandHandler($repository, $policy, $listRepository);
-        $this->assertEquals($id, $handler($command));
+        $handler($command);
     }
 }

@@ -9,7 +9,6 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Owner\OwnerId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Exception\OwnershipMismatchException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnerRegisteredPolicy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\ListRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList;
 
@@ -37,10 +36,9 @@ class CreateListCommandHandler implements CommandHandlerInterface
 
     /**
      * @param CreateList $createList
-     * @return string
      * @throws OwnershipMismatchException
      */
-    public function __invoke(CreateList $createList): string
+    public function __invoke(CreateList $createList): void
     {
         $ownerId = new OwnerId($createList->getOwnerId());
         if (TaskList::DEFAULT_LIST_NAME !== $createList->getName()) {
@@ -54,7 +52,5 @@ class CreateListCommandHandler implements CommandHandlerInterface
         );
 
         $this->listRepository->save($list);
-
-        return (string) $list->getId();
     }
 }

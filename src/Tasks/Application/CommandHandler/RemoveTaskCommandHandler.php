@@ -41,7 +41,7 @@ class RemoveTaskCommandHandler implements CommandHandlerInterface
      * @throws EntityNotFoundException
      * @throws OwnershipMismatchException
      */
-    public function __invoke(RemoveTask $removeTask)
+    public function __invoke(RemoveTask $removeTask): void
     {
         $task = $this->taskRepository->findById(new TaskId($removeTask->getId()));
         $this->ownershipPolicy->verify($task);

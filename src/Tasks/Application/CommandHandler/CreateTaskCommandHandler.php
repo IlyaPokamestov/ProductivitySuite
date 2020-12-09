@@ -45,9 +45,8 @@ class CreateTaskCommandHandler implements CommandHandlerInterface
 
     /**
      * @param CreateTask $createTask
-     * @return string
      */
-    public function __invoke(CreateTask $createTask): string
+    public function __invoke(CreateTask $createTask)
     {
         $ownerId = new OwnerId($createTask->getOwnerId());
         $this->ownerRegisteredPolicy->verify($ownerId);
@@ -63,7 +62,5 @@ class CreateTaskCommandHandler implements CommandHandlerInterface
         );
 
         $this->taskRepository->save($task);
-
-        return (string) $task->getId();
     }
 }

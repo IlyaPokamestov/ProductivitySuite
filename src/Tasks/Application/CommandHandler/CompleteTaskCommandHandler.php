@@ -37,7 +37,7 @@ class CompleteTaskCommandHandler implements CommandHandlerInterface
      * @param CompleteTask $completeTask
      * @throws EntityNotFoundException
      */
-    public function __invoke(CompleteTask $completeTask)
+    public function __invoke(CompleteTask $completeTask): void
     {
         $task = $this->taskRepository->findById(new TaskId($completeTask->getId()));
 

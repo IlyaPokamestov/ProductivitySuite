@@ -2,7 +2,7 @@
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Domain;
 
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Email;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Email;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

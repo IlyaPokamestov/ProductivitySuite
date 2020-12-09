@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Application\Query;
 
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\Consumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindByIdHandler;
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\ConsumerRepository;
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindById;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\ReadModel\ConsumerReadModel;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\QueryHandler\FindConsumerByIdQueryHandler;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\ReadModel\ConsumerReadRepository;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindConsumerById;
 use PHPUnit\Framework\TestCase;
 
 class ConsumerHandlerTest extends TestCase
 {
     public function testFindById()
     {
-        $consumerDto = \Mockery::mock(Consumer::class);
-        $repository = \Mockery::mock(ConsumerRepository::class);
+        $consumerDto = \Mockery::mock(\IlyaPokamestov\ProductivitySuite\IDMS\Application\ReadModel\ConsumerReadModel::class);
+        $repository = \Mockery::mock(ConsumerReadRepository::class);
         $repository->shouldReceive('findById')
             ->withAnyArgs()
             ->andReturn($consumerDto);
 
-        $handler = new FindByIdHandler($repository);
-        $this->assertEquals($consumerDto, $handler(new FindById('123')));
+        $handler = new FindConsumerByIdQueryHandler($repository);
+        $this->assertEquals($consumerDto, $handler(new FindConsumerById('123')));
     }
 }

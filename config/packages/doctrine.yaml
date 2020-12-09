@@ -3,10 +3,10 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         types:
             identity: IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Type\IdentityType
-            consumer_id: IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Doctrine\Type\ConsumerIdType
-            list_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Type\ListIdType
-            task_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Type\TaskIdType
-            owner_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Doctrine\Type\OwnerIdType
+            consumer_id: IlyaPokamestov\ProductivitySuite\IDMS\Infrastructure\Persistence\Doctrine\Type\ConsumerIdType
+            list_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Type\ListIdType
+            task_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Type\TaskIdType
+            owner_id: IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Type\OwnerIdType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

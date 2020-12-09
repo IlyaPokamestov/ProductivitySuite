@@ -3,10 +3,9 @@
 namespace IlyaPokamestov\ProductivitySuite\Tests\IDMS\Unit\Application;
 
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\RegisterConsumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Application\RegistrationSaga;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Consumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerId;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerRepository;
+use IlyaPokamestov\ProductivitySuite\IDMS\Application\Saga\RegistrationSaga;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Consumer;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Repository\ConsumerRepository;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
@@ -28,9 +27,7 @@ class RegistrationSagaTest extends TestCase
             'test@test.com'
         );
 
-        $id = ConsumerId::next();
-
         $handler = new RegistrationSaga($repository);
-        $this->assertEquals($id, $handler->initiateRegistration($command));
+        $handler->initiateRegistration($command);
     }
 }

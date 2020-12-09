@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\IDMS\Application\Command;
 
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\ConsumerId;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandInterface;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,8 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class RegisterConsumer
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Application\Command
  */
-class RegisterConsumer
+final class RegisterConsumer implements CommandInterface
 {
+    /** @var ConsumerId */
+    private ConsumerId $id;
+
     /**
      * @var string
      * @Assert\NotNull(message="Username can not be empty.")
@@ -77,10 +82,24 @@ class RegisterConsumer
      */
     public function __construct(string $username, string $firstName, string $lastName, string $email)
     {
+        $this->id = ConsumerId::generate();
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+    }
+
+    /**
+     * @return ConsumerId
+     */
+    public function getId(): ConsumerId
+    {
+        //TODO: Switch controllers to RequestsDTO's
+        if (!isset($this->id)) {
+            $this->id = ConsumerId::generate();
+        }
+
+        return $this->id;
     }
 
     /**

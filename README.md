@@ -22,7 +22,8 @@ As a result, we should get a RESTful Web API service.
 ## Table of contents
 
 1) [Analysis of domain](./docs/001-analysis-of-tasks-applications.md)
-2) [API documentation](./docs/002-api-documentation.md)
+2) [Project structure](./docs/002-project-structure.md)
+2) [API documentation](./docs/020-api-documentation.md)
 
 ## Done:
 - [x] Setup Symfony 5 project.

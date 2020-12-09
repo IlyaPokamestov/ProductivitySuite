@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
 
-use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowError;
+use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowValidationError;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandBusInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryBusInterface;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CreateTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\MoveTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\RemoveTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CompleteTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\Task;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\Task\FindById;
-use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\MessageBus\HandleTrait;
-use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\Request\CompleteTaskRequest;
-use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller\Request\MoveTaskRequest;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\MoveTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\RemoveTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CompleteTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTaskById;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskReadModel;
+use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\CompleteTaskRequest;
+use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\MoveTaskRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +30,21 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 class TaskController
 {
-    use HandleTrait;
+    /** @var CommandBusInterface */
+    private CommandBusInterface $commandBus;
+    /** @var QueryBusInterface */
+    private QueryBusInterface $queryBus;
+
+    /**
+     * TaskController constructor.
+     * @param CommandBusInterface $commandBus
+     * @param QueryBusInterface $queryBus
+     */
+    public function __construct(CommandBusInterface $commandBus, QueryBusInterface $queryBus)
+    {
+        $this->commandBus = $commandBus;
+        $this->queryBus = $queryBus;
+    }
 
     /**
      * @Route("/tasks", name="task.create", methods={"POST"})
@@ -46,7 +61,7 @@ class TaskController
      * @OA\Response(
      *     response=200,
      *     description="Task created",
-     *     @Model(type=Task::class)
+     *     @Model(type=TaskReadModel::class)
      * )
      * @OA\Response(
      *     response=401,
@@ -57,15 +72,16 @@ class TaskController
      *
      * @param CreateTask $createTask
      * @param ConstraintViolationListInterface $errors
-     * @return Task
+     * @return TaskReadModel
      */
     public function create(CreateTask $createTask, ConstraintViolationListInterface $errors)
     {
-        ThrowError::fromConstraintViolation($errors);
+        ThrowValidationError::fromConstraintViolation($errors);
 
-        $id = $this->command($createTask);
+        $id = $createTask->getId();
+        $this->commandBus->command($createTask);
 
-        return $this->query(new FindById($id));
+        return $this->queryBus->query(new FindTaskById((string) $id));
     }
 
     /**
@@ -89,7 +105,7 @@ class TaskController
      * @OA\Response(
      *     response=200,
      *     description="Task completed",
-     *     @Model(type=Task::class)
+     *     @Model(type=TaskReadModel::class)
      * )
      * @OA\Response(
      *     response=404,
@@ -111,17 +127,17 @@ class TaskController
      * @param string $id
      * @param CompleteTaskRequest $patchRequest
      * @param ConstraintViolationListInterface $errors
-     * @return Task
+     * @return TaskReadModel
      */
     public function complete(string $id, CompleteTaskRequest $patchRequest, ConstraintViolationListInterface $errors)
     {
-        ThrowError::fromConstraintViolation($errors);
+        ThrowValidationError::fromConstraintViolation($errors);
 
         if ($patchRequest->isCompleted()) {
-            $this->command(new CompleteTask($id));
+            $this->commandBus->command(new CompleteTask($id));
         }
 
-        return $this->query(new FindById($id));
+        return $this->queryBus->query(new FindTaskById($id));
     }
 
     /**
@@ -139,7 +155,7 @@ class TaskController
      * @OA\Response(
      *     response=200,
      *     description="Task removed",
-     *     @Model(type=Task::class)
+     *     @Model(type=TaskReadModel::class)
      * )
      * @OA\Response(
      *     response=401,
@@ -159,7 +175,7 @@ class TaskController
     public function remove(string $id)
     {
         try {
-            $this->command(new RemoveTask($id));
+            $this->commandBus->command(new RemoveTask($id));
         } catch (EntityNotFoundException $exception) {
             //ignore
         }
@@ -214,9 +230,9 @@ class TaskController
      */
     public function move(string $id, MoveTaskRequest $moveTask, ConstraintViolationListInterface $errors)
     {
-        ThrowError::fromConstraintViolation($errors);
+        ThrowValidationError::fromConstraintViolation($errors);
 
-        $this->command(new MoveTask($id, $moveTask->getListId()));
+        $this->commandBus->command(new MoveTask($id, $moveTask->getListId()));
 
         return $moveTask;
     }

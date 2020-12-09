@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Application\Command\Task;
 
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CompleteTask;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\Task\CompleteTaskHandler;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\Policy\OwnershipPolicy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskRepository;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CompleteTask;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\CommandHandler\CompleteTaskCommandHandler;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Owner\OwnerId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Description;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Task;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\TaskId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\TaskRepository;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -44,7 +44,7 @@ class CompleteTaskHandlerTest extends TestCase
             Uuid::uuid4()->toString(),
         );
 
-        $handler = new CompleteTaskHandler($repository, $policy);
+        $handler = new CompleteTaskCommandHandler($repository, $policy);
         $handler($command);
     }
 }

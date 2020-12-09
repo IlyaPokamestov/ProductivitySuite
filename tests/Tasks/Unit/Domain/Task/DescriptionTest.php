@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tests\Tasks\Unit\Domain\Task;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\InvalidArgumentException;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Description;
 use IlyaPokamestov\ProductivitySuite\Tests\RandomString;
 use PHPUnit\Framework\TestCase;
 

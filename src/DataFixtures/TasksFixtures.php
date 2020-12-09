@@ -4,16 +4,16 @@ namespace IlyaPokamestov\ProductivitySuite\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Consumer;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\ConsumerId;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Email;
-use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Name;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Owner\OwnerId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Description;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\Task;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Task\TaskId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\ListId;
-use IlyaPokamestov\ProductivitySuite\Tasks\Domain\TaskList\TaskList;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Consumer;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\ConsumerId;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Email;
+use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Name;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Owner\OwnerId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Description;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\Task;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task\TaskId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList;
 
 class TasksFixtures extends Fixture
 {

@@ -7,6 +7,7 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\CommandHandler;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandHandlerInterface;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\DomainException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\RemoveList;
+use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Exception\OwnershipMismatchException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnerRegisteredPolicy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Repository\ListRepository;
@@ -36,9 +37,9 @@ class RemoveListCommandHandler implements CommandHandlerInterface
 
     /**
      * @param RemoveList $removeList
-     * @throws \IlyaPokamestov\ProductivitySuite\Tasks\Domain\Exception\OwnershipMismatchException
+     * @throws OwnershipMismatchException
      */
-    public function __invoke(RemoveList $removeList)
+    public function __invoke(RemoveList $removeList): void
     {
         $list = $this->listRepository->findById(new ListId($removeList->getId()));
         $this->ownerRegisteredPolicy->verify($list->getOwnerId());

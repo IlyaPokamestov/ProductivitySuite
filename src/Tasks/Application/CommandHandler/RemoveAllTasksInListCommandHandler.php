@@ -34,7 +34,7 @@ class RemoveAllTasksInListCommandHandler implements CommandHandlerInterface
      *
      * @param RemoveAllTasksInList $removeTasks
      */
-    public function __invoke(RemoveAllTasksInList $removeTasks)
+    public function __invoke(RemoveAllTasksInList $removeTasks): void
     {
         $this->taskRepository->removeByListId(new ListId($removeTasks->getId()));
     }

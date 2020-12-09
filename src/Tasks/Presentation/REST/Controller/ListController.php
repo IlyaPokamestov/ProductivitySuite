@@ -6,16 +6,18 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
 
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\Criteria;
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowValidationError;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandBusInterface;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryBusInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Authorization\AuthorizationContextInterface;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareTrait;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CqrsControllerTrait;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\RemoveList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTasksBy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListBy;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListById;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskListReadModel;
-use IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Service\RequestBasedOwnershipPolicy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\CreateListRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +32,11 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  * Class ListController
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller
  */
-class ListController
+class ListController implements AuthorizationAwareInterface
 {
+    use CqrsControllerTrait;
+    use AuthorizationAwareTrait;
+
     /**
      * @Route("/lists", name="list.list", methods={"GET"})
      *
@@ -59,19 +64,14 @@ class ListController
      * @OA\Tag(name="Tasks - List")
      *
      * @param Request $request
-     * @param RequestBasedOwnershipPolicy $policy
-     * @param QueryBusInterface $queryBus
      * @return TaskListReadModel
      */
-    public function listAll(
-        Request $request,
-        RequestBasedOwnershipPolicy $policy,
-        QueryBusInterface $queryBus
-    ) {
+    public function listAll(Request $request)
+    {
         $criteria = Criteria::from($request)
-            ->where(Criteria::expr()->eq('ownerId', $policy->getRequestOwnerId()));
+            ->where(Criteria::expr()->eq('ownerId', $this->authorizationContext->getRequesterId()));
 
-        return $queryBus->query(new FindListBy($criteria));
+        return $this->queryBus->query(new FindListBy($criteria));
     }
 
     /**
@@ -117,19 +117,19 @@ class ListController
      *
      * @param string $id
      * @param Request $request
-     * @param QueryBusInterface $queryBus
      * @return mixed
      */
-    public function findTasksBy(string $id, Request $request, QueryBusInterface $queryBus)
+    public function findTasksBy(string $id, Request $request)
     {
         $completed = (bool) $request->query->get('completed', null);
 
         $criteria = Criteria::from($request)
             ->where(Criteria::expr()->eq('listId', $id))
+            ->andWhere(Criteria::expr()->eq('ownerId', $this->authorizationContext->getRequesterId()))
             ->andWhere(Criteria::expr()->eq('completed', $completed))
         ;
 
-        return $queryBus->query(new FindTasksBy($criteria));
+        return $this->queryBus->query(new FindTasksBy($criteria));
     }
 
     /**
@@ -142,7 +142,7 @@ class ListController
      * @OA\RequestBody(
      *     description="List",
      *     required=true,
-     *     @Model(type=CreateList::class)
+     *     @Model(type=CreateListRequest::class)
      * )
      * @OA\Response(
      *     response=200,
@@ -156,24 +156,21 @@ class ListController
      * )
      * @OA\Tag(name="Tasks - List")
      *
-     * @param CreateList $createList
+     * @param CreateListRequest $createList
      * @param ConstraintViolationListInterface $errors
-     * @param CommandBusInterface $commandBus
-     * @param QueryBusInterface $queryBus
      * @return TaskListReadModel
      */
-    public function create(
-        CreateList $createList,
-        ConstraintViolationListInterface $errors,
-        CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus
-    ) {
+    public function create(CreateListRequest $createList, ConstraintViolationListInterface $errors)
+    {
         ThrowValidationError::fromConstraintViolation($errors);
 
-        $id = $createList->getId();
-        $commandBus->command($createList);
+        $command = new CreateList(
+            $createList->getName(),
+            $this->authorizationContext->getRequesterId(),
+        );
+        $this->commandBus->command($command);
 
-        return $queryBus->query(new FindListById((string) $id));
+        return $this->queryBus->query(new FindListById((string) $command->getId()));
     }
 
     /**
@@ -206,13 +203,12 @@ class ListController
      * @OA\Tag(name="Tasks - List")
      *
      * @param string $id
-     * @param CommandBusInterface $commandBus
      * @return Response
      */
-    public function remove(string $id, CommandBusInterface $commandBus): Response
+    public function remove(string $id): Response
     {
         try {
-            $commandBus->command(new RemoveList($id));
+            $this->commandBus->command(new RemoveList($id));
         } catch (EntityNotFoundException $exception) {
             //ignore as DELETE method is idempotent.
         }

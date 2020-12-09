@@ -6,8 +6,6 @@ namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\Command;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
-use JMS\Serializer\Annotation as Serializer;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class CreateList
@@ -17,30 +15,9 @@ final class CreateList implements CommandInterface
 {
     /** @var ListId */
     private ListId $id;
-
-    /**
-     * @Assert\NotNull(message="Name can not be empty.")
-     * @Assert\Length(
-     *     min="1",
-     *     max="150",
-     *     minMessage="Name should be more than 1 character lenght",
-     *     maxMessage="Name can not be more than 150 characters lenght"
-     * )
-     *
-     * @var string
-     */
+    /** @var string */
     private string $name;
-
-    /**
-     *
-     * @Assert\NotNull(message="Owner ID can not be empty.")
-     * @Assert\Uuid(message="Owner ID should be a valid UUID.")
-     *
-     * @var string
-     * @Serializer\SerializedName("ownerId")
-     *
-     * @var string
-     */
+    /** @var string */
     private string $ownerId;
 
     /**
@@ -50,6 +27,7 @@ final class CreateList implements CommandInterface
      */
     public function __construct(string $name, string $ownerId)
     {
+        $this->id = ListId::generate();
         $this->name = $name;
         $this->ownerId = $ownerId;
     }
@@ -59,11 +37,6 @@ final class CreateList implements CommandInterface
      */
     public function getId(): ListId
     {
-        //TODO: Switch controllers to RequestsDTO's
-        if (!isset($this->id)) {
-            $this->id = ListId::generate();
-        }
-
         return $this->id;
     }
 

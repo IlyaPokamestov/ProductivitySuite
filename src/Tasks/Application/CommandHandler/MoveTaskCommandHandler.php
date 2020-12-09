@@ -48,7 +48,7 @@ class MoveTaskCommandHandler implements CommandHandlerInterface
      * @param MoveTask $moveTask
      * @throws EntityNotFoundException
      */
-    public function __invoke(MoveTask $moveTask)
+    public function __invoke(MoveTask $moveTask): void
     {
         $task = $this->taskRepository->findById(new TaskId($moveTask->getId()));
         $this->ownershipPolicy->verify($task);

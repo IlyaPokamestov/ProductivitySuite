@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
 
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowValidationError;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandBusInterface;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryBusInterface;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareTrait;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CqrsControllerTrait;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\MoveTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\RemoveTask;
@@ -15,6 +16,7 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CompleteTask;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTaskById;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskReadModel;
 use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\CompleteTaskRequest;
+use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\CreateTaskRequest;
 use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\MoveTaskRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,23 +30,10 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  * Class TaskController
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller
  */
-class TaskController
+class TaskController implements AuthorizationAwareInterface
 {
-    /** @var CommandBusInterface */
-    private CommandBusInterface $commandBus;
-    /** @var QueryBusInterface */
-    private QueryBusInterface $queryBus;
-
-    /**
-     * TaskController constructor.
-     * @param CommandBusInterface $commandBus
-     * @param QueryBusInterface $queryBus
-     */
-    public function __construct(CommandBusInterface $commandBus, QueryBusInterface $queryBus)
-    {
-        $this->commandBus = $commandBus;
-        $this->queryBus = $queryBus;
-    }
+    use CqrsControllerTrait;
+    use AuthorizationAwareTrait;
 
     /**
      * @Route("/tasks", name="task.create", methods={"POST"})
@@ -70,18 +59,23 @@ class TaskController
      * )
      * @OA\Tag(name="Tasks - Task")
      *
-     * @param CreateTask $createTask
+     * @param CreateTaskRequest $createTask
      * @param ConstraintViolationListInterface $errors
      * @return TaskReadModel
      */
-    public function create(CreateTask $createTask, ConstraintViolationListInterface $errors)
+    public function create(CreateTaskRequest $createTask, ConstraintViolationListInterface $errors)
     {
         ThrowValidationError::fromConstraintViolation($errors);
 
-        $id = $createTask->getId();
-        $this->commandBus->command($createTask);
+        $command = new CreateTask(
+            $createTask->getTitle(),
+            $createTask->getNote(),
+            $createTask->getListId(),
+            $this->authorizationContext->getRequesterId()
+        );
+        $this->commandBus->command($command);
 
-        return $this->queryBus->query(new FindTaskById((string) $id));
+        return $this->queryBus->query(new FindTaskById((string) $command->getId()));
     }
 
     /**

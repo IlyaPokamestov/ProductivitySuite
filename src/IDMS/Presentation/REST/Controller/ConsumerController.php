@@ -6,9 +6,9 @@ namespace IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Controller;
 
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Command\RegisterConsumer;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\Query\FindConsumerById;
+use IlyaPokamestov\ProductivitySuite\IDMS\Presentation\REST\Request\RegistrationRequest;
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowValidationError;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandBusInterface;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryBusInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CqrsControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Routing\Annotation\Route;
 use IlyaPokamestov\ProductivitySuite\IDMS\Application\ReadModel\ConsumerReadModel as ReadConsumer;
@@ -23,6 +23,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 class ConsumerController
 {
+    use CqrsControllerTrait;
+
     /**
      * @Route("/consumers/{id}", name="consumer.show", methods={"GET"})
      *
@@ -48,12 +50,11 @@ class ConsumerController
      * @OA\Tag(name="IDMS")
      *
      * @param string $id
-     * @param QueryBusInterface $bus
      * @return ReadConsumer
      */
-    public function findById(string $id, QueryBusInterface $bus)
+    public function findById(string $id)
     {
-        return $bus->query(new FindConsumerById($id));
+        return $this->queryBus->query(new FindConsumerById($id));
     }
 
     /**
@@ -66,7 +67,7 @@ class ConsumerController
      * @OA\RequestBody(
      *     description="Consumer",
      *     required=true,
-     *     @Model(type=RegisterConsumer::class)
+     *     @Model(type=RegistrationRequest::class)
      * )
      * @OA\Response(
      *     response=200,
@@ -75,23 +76,23 @@ class ConsumerController
      * )
      * @OA\Tag(name="IDMS")
      *
-     * @param RegisterConsumer $registerConsumer
+     * @param RegistrationRequest $registerConsumer
      * @param ConstraintViolationListInterface $errors
-     * @param CommandBusInterface $commandBus
-     * @param QueryBusInterface $queryBus
      * @return ReadConsumer
      */
-    public function register(
-        RegisterConsumer $registerConsumer,
-        ConstraintViolationListInterface $errors,
-        CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus
-    ) {
+    public function register(RegistrationRequest $registerConsumer, ConstraintViolationListInterface $errors)
+    {
         ThrowValidationError::fromConstraintViolation($errors);
 
-        $id = $registerConsumer->getId();
-        $commandBus->command($registerConsumer);
+        $command = new RegisterConsumer(
+            $registerConsumer->getUsername(),
+            $registerConsumer->getFirstName(),
+            $registerConsumer->getLastName(),
+            $registerConsumer->getEmail(),
+        );
 
-        return $queryBus->query(new FindConsumerById((string) $id));
+        $this->commandBus->command($command);
+
+        return $this->queryBus->query(new FindConsumerById((string) $command->getId()));
     }
 }

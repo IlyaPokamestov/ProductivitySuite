@@ -8,8 +8,8 @@ use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoot;
-use Symfony\Component\Messenger\MessageBusInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\EventBusInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderInterface;
 
 /**
  * Class DoctrineDomainEventsCollector
@@ -22,18 +22,18 @@ class DoctrineDomainEventsCollector implements EventSubscriberInterface
      * During one transaction / command execution it can be multiple aggregates involved.
      * With this collector we will track and collect them in this map.
      *
-     * @var AggregateRoot[]
+     * @var EventRecorderInterface[]
      */
     private array $aggregateRoots = [];
 
-    /** @var MessageBusInterface */
-    private MessageBusInterface $eventBus;
+    /** @var EventBusInterface */
+    private EventBusInterface $eventBus;
 
     /**
      * DoctrineDomainEventsCollector constructor.
-     * @param MessageBusInterface $eventBus
+     * @param EventBusInterface $eventBus
      */
-    public function __construct(MessageBusInterface $eventBus)
+    public function __construct(EventBusInterface $eventBus)
     {
         $this->eventBus = $eventBus;
     }
@@ -89,7 +89,7 @@ class DoctrineDomainEventsCollector implements EventSubscriberInterface
     private function collectAggregateRoots(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
-        if ($entity instanceof AggregateRoot) {
+        if ($entity instanceof EventRecorderInterface) {
             $this->aggregateRoots[] = $entity;
         }
     }

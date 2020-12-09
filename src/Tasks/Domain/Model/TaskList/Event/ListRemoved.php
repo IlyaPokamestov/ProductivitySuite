@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\Event;
 
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Event;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventInterface;
 
 /**
  * Class ListRemoved
  * @package IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\Event
  */
-final class ListRemoved implements Event
+final class ListRemoved implements EventInterface
 {
     /** @var string */
     private string $id;

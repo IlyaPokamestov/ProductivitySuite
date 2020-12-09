@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Task;
 
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoot;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderTrait;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Removable;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\RemovableTrait;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Owner\Ownerable;
@@ -24,8 +25,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="task", indexes={@ORM\Index(name="search_idx", columns={"list_id", "completed"})})
  */
-class Task extends AggregateRoot implements Removable, Ownerable
+class Task implements EventRecorderInterface, Removable, Ownerable
 {
+    use EventRecorderTrait;
     use RemovableTrait;
     use OwnerableTrait;
 

@@ -10,7 +10,8 @@ use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Name;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Event\RegistrationCompleted;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Event\RegistrationInitiated;
 use IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Status;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoot;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,8 +19,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Domain
  * @ORM\Entity()
  */
-class Consumer extends AggregateRoot
+class Consumer implements EventRecorderInterface
 {
+    use EventRecorderTrait;
+
     /**
      * @ORM\Id()
      * @ORM\Column(type="consumer_id")

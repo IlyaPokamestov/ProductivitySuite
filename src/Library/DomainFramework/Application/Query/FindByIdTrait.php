@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Query;
 
 /**
- * Class FindById
+ * Trait FindByIdTrait
  * @package IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Query
  */
-class FindById
+trait FindByIdTrait
 {
     /** @var string */
     protected string $id;

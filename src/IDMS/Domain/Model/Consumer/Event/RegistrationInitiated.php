@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Event;
 
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Event;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventInterface;
 
 /**
  * Class ConsumerRegistered
@@ -15,7 +15,7 @@ use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Event;
  * (but it's of course possible to serialize objects)
  * - other bounded contexts which listed those event's shouldn't depend on the events from another bounded context
  */
-final class RegistrationInitiated implements Event
+final class RegistrationInitiated implements EventInterface
 {
     /** @var string */
     private string $id;

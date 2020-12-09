@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\IDMS\Domain\Model\Consumer\Event;
 
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Event;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventInterface;
 
 /**
  * Class RegistrationCompleted
  * @package IlyaPokamestov\ProductivitySuite\IDMS\Domain
  */
-final class RegistrationCompleted implements Event
+final class RegistrationCompleted implements EventInterface
 {
     /** @var string */
     private string $id;

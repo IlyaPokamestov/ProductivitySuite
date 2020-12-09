@@ -38,3 +38,4 @@ services:
 
     IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\CommandBusInterface: '@IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CommandBusSymfonyMessengerAdapter'
     IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryBusInterface: '@IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\QueryBusSymfonyMessengerAdapter'
+    IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\EventBusInterface: '@IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\EventBusSymfonyMessengerAdapter'

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList;
 
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\AggregateRoot;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\EventRecorderTrait;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Assert;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Removable;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\RemovableTrait;
@@ -25,8 +26,9 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\Owner\OwnerId;
  * @ORM\Entity()
  * @ORM\Table(name="list")
  */
-class TaskList extends AggregateRoot implements Removable, Ownerable
+class TaskList implements EventRecorderInterface, Removable, Ownerable
 {
+    use EventRecorderTrait;
     use RemovableTrait;
     use OwnerableTrait;
 

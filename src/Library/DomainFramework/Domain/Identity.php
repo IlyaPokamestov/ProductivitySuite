@@ -13,10 +13,10 @@ use Ramsey\Uuid\Uuid;
 class Identity
 {
     /** @var string|null */
-    protected static ?string $next = null;
+    private static ?string $next = null;
 
     /** @var string */
-    protected string $id;
+    private string $id;
 
     /**
      * Generate identity.

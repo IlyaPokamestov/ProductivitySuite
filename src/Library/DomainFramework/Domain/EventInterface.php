@@ -8,8 +8,8 @@ namespace IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain;
  * Interface Event
  * @package IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain
  *
- * Base interface for all the domain events.
+ * Interface for all the domain events.
  */
-interface Event
+interface EventInterface
 {
 }

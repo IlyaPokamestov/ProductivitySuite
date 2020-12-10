@@ -49,7 +49,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "IlyaPokamestov\\ProductivitySuite\\Tests\\": "tests/"
+            "IlyaPokamestov\\ProductivitySuite\\Tests\\": "tests/",
+            "IlyaPokamestov\\ProductivitySuite\\DataFixtures\\": "fixtures/"
         }
     },
     "replace": {

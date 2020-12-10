@@ -60,6 +60,7 @@ class RegistrationSaga implements MessageSubscriberInterface
      * TODO: Ideally we shouldn't use domain event classes from other bounded contexts.
      * TODO: But at the moment I do not see how we can easily do that with Symfony Messenger.
      * TODO: Need more time to find a better solution here.
+     * TODO: To save time I'll call domain directly here, ideally command have to be send.
      */
     public function completeRegistration(ListCreated $listCreated)
     {
@@ -75,7 +76,11 @@ class RegistrationSaga implements MessageSubscriberInterface
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * TODO: Dependency on Symfony messenger, need to be decoupled.
+     *
+     * {@inheritDoc}
+     */
     public static function getHandledMessages(): iterable
     {
         yield RegisterConsumer::class => [

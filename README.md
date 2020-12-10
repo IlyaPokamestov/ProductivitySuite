@@ -27,8 +27,8 @@ As a result, we should get a RESTful Web API service.
 4) [Continuous Integration](./docs/004-ci.md)
 5) [Local Installation](./docs/005-local-setup.md)
 6) [Authorization Approach](./docs/006-authorization.md)
-
-20) [API documentation](./docs/020-api-documentation.md)
+7) [CQRS and Saga](./docs/007-cqrs-read-model.md)
+8) [API documentation](./docs/020-api-documentation.md)
 
 ## Done:
 - [x] Setup Symfony 5 project.
@@ -49,10 +49,9 @@ As a result, we should get a RESTful Web API service.
 - [x] CI: Run functional tests on CI.
 
 ## TODO:
-- [ ] Fill in documentation gaps.
-- [ ] Container publishing.
 - [ ] I do not see an easy way how to make symfony messenger listed events from other bounded
 contexts without explicit use of the domain event classes in the handlers.
+- [ ] Docker container publishing.
 - [ ] Bring observability
 - [ ] Health checks
 

@@ -23,7 +23,12 @@ As a result, we should get a RESTful Web API service.
 
 1) [Analysis of domain](./docs/001-analysis-of-tasks-applications.md)
 2) [Project structure](./docs/002-project-structure.md)
-2) [API documentation](./docs/020-api-documentation.md)
+3) [Code styles](./docs/003-code-style.md)
+4) [Continuous Integration](./docs/004-ci.md)
+5) [Local Installation](./docs/005-local-setup.md)
+6) [Authorization Approach](./docs/006-authorization.md)
+
+20) [API documentation](./docs/020-api-documentation.md)
 
 ## Done:
 - [x] Setup Symfony 5 project.

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\QueryHandler;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryHandlerInterface;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListBy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListByCriteria;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\ListReadRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy;
 
@@ -32,11 +32,11 @@ class FindListByQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param FindListBy $findBy
-     * @return \Iterator
+     * @param FindListByCriteria $findBy
+     * @return array
      */
-    public function __invoke(FindListBy $findBy)
+    public function __invoke(FindListByCriteria $findBy)
     {
-        return $this->listRepository->findBy($findBy->getCriteria());
+        return $this->listRepository->findByCriteria($findBy->getCriteria());
     }
 }

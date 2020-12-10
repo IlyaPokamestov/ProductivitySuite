@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\QueryHandler;
 
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Messaging\QueryHandlerInterface;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTasksBy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTasksByCriteria;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskReadRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Policy\OwnershipPolicy;
 
@@ -32,11 +32,11 @@ class FindTasksByQueryHandler implements QueryHandlerInterface
     }
 
     /**
-     * @param FindTasksBy $findTasksBy
-     * @return \Iterator
+     * @param FindTasksByCriteria $findTasksBy
+     * @return array
      */
-    public function __invoke(FindTasksBy $findTasksBy)
+    public function __invoke(FindTasksByCriteria $findTasksBy)
     {
-        return $this->taskRepository->findBy($findTasksBy->getCriteria());
+        return $this->taskRepository->findByCriteria($findTasksBy->getCriteria());
     }
 }

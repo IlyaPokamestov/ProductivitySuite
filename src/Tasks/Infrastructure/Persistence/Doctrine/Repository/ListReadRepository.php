@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Infrastructure\Persistence\Doctrine\Repository;
 
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Query\Criteria\CriteriaInterface;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\ListId;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\ListReadRepository as ReadRepository;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskListReadModel;
@@ -15,18 +16,20 @@ use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList;
  */
 class ListReadRepository implements ReadRepository
 {
-    use FindByCriteriaTrait;
+    use ApplyCriteriaTrait;
 
     /** @var ListRepository */
     private ListRepository $repository;
 
     /**
-     * ListRepository constructor.
+     * ListReadRepository constructor.
      * @param ListRepository $repository
+     * @param CriteriaToDoctrineCriteriaConverter $converter
      */
-    public function __construct(ListRepository $repository)
+    public function __construct(ListRepository $repository, CriteriaToDoctrineCriteriaConverter $converter)
     {
         $this->repository = $repository;
+        $this->converter = $converter;
     }
 
     /** {@inheritDoc} */
@@ -42,7 +45,18 @@ class ListReadRepository implements ReadRepository
     }
 
     /** {@inheritDoc} */
-    protected function map(TaskList $object)
+    public function findByCriteria(CriteriaInterface $criteria): array
+    {
+        $results = $this->applyCriteria($criteria);
+
+        return array_map([$this, 'map'], $results);
+    }
+
+    /**
+     * @param TaskList $object
+     * @return TaskListReadModel
+     */
+    private function map(TaskList $object)
     {
         return new TaskListReadModel(
             (string) $object->getId(),

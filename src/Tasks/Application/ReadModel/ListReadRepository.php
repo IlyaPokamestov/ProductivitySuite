@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel;
 
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Query\Criteria\CriteriaInterface;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskListReadModel;
 use IlyaPokamestov\ProductivitySuite\Tasks\Domain\Model\TaskList\TaskList as AggregateTaskList;
@@ -27,10 +28,10 @@ interface ListReadRepository
     /**
      * Find by criteria.
      *
-     * @param mixed $criteria
-     * @return Iterator
+     * @param CriteriaInterface $criteria
+     * @return array
      */
-    public function findBy($criteria): Iterator;
+    public function findByCriteria(CriteriaInterface $criteria): array;
 
     /**
      * Find aggregate by ID.

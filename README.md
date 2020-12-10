@@ -48,6 +48,9 @@ As a result, we should get a RESTful Web API service.
 - [ ] Container publishing.
 - [ ] I do not see an easy way how to make symfony messenger listed events from other bounded
 contexts without explicit use of the domain event classes in the handlers.
-- [ ] Make Criteria generic.
 - [ ] Bring observability
 - [ ] Health checks
+
+### Author
+
+Ilya Pokamestov - *December 2020*.

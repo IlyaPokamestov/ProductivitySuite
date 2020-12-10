@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Controller;
 
-use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\Criteria;
+use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\CriteriaExtractor;
 use IlyaPokamestov\ProductivitySuite\Library\ApplicationFramework\ThrowValidationError;
-use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Authorization\AuthorizationContextInterface;
+use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Application\Query\Criteria\Expression\Equal;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Domain\Error\EntityNotFoundException;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareInterface;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Authorization\AuthorizationAwareTrait;
 use IlyaPokamestov\ProductivitySuite\Library\DomainFramework\Infrastructure\Messaging\CqrsControllerTrait;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\RemoveList;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTasksBy;
-use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListBy;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindTasksByCriteria;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListByCriteria;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Command\CreateList;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\Query\FindListById;
 use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskListReadModel;
+use IlyaPokamestov\ProductivitySuite\Tasks\Application\ReadModel\TaskReadModel;
 use IlyaPokamestov\ProductivitySuite\Tasks\Presentation\REST\Request\CreateListRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,14 +65,16 @@ class ListController implements AuthorizationAwareInterface
      * @OA\Tag(name="Tasks - List")
      *
      * @param Request $request
-     * @return TaskListReadModel
+     * @return array|TaskListReadModel[]
      */
     public function listAll(Request $request)
     {
-        $criteria = Criteria::from($request)
-            ->where(Criteria::expr()->eq('ownerId', $this->authorizationContext->getRequesterId()));
+        $criteria = CriteriaExtractor::fromRequest($request);
+        $criteria->where([
+            new Equal('ownerId', $this->authorizationContext->getRequesterId())
+        ]);
 
-        return $this->queryBus->query(new FindListBy($criteria));
+        return $this->queryBus->query(new FindListByCriteria($criteria));
     }
 
     /**
@@ -117,19 +120,20 @@ class ListController implements AuthorizationAwareInterface
      *
      * @param string $id
      * @param Request $request
-     * @return mixed
+     * @return array|TaskReadModel[]
      */
     public function findTasksBy(string $id, Request $request)
     {
         $completed = (bool) $request->query->get('completed', null);
 
-        $criteria = Criteria::from($request)
-            ->where(Criteria::expr()->eq('listId', $id))
-            ->andWhere(Criteria::expr()->eq('ownerId', $this->authorizationContext->getRequesterId()))
-            ->andWhere(Criteria::expr()->eq('completed', $completed))
-        ;
+        $criteria = CriteriaExtractor::fromRequest($request);
+        $criteria->where([
+            new Equal('listId', $id),
+            new Equal('completed', $completed),
+            new Equal('ownerId', $this->authorizationContext->getRequesterId())
+        ]);
 
-        return $this->queryBus->query(new FindTasksBy($criteria));
+        return $this->queryBus->query(new FindTasksByCriteria($criteria));
     }
 
     /**
